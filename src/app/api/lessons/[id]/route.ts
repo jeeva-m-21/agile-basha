@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { level0Lesson1 } from "@/lib/curriculum/lesson1";
+import { level0Lesson2 } from "@/lib/curriculum/lesson2";
 
 export async function GET(
   request: Request,
@@ -7,10 +8,10 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  if (id === "level-0-lesson-1" || id === "latest") {
-    return NextResponse.json({ lesson: level0Lesson1 });
+  if (id === "level-0-lesson-2") {
+    return NextResponse.json({ lesson: level0Lesson2 });
   }
 
-  // Return lesson 1 as default for initial curriculum
+  // Return lesson 1 for level-0-lesson-1, latest, or default
   return NextResponse.json({ lesson: level0Lesson1 });
 }

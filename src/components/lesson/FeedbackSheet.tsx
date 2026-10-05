@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 export interface FeedbackSheetProps {
   isCorrect: boolean;
   explanation: string;
+  alsoCorrect?: string;
   onContinue: () => void;
   continueText?: string;
 }
@@ -12,6 +13,7 @@ export interface FeedbackSheetProps {
 export function FeedbackSheet({
   isCorrect,
   explanation,
+  alsoCorrect,
   onContinue,
   continueText,
 }: FeedbackSheetProps) {
@@ -47,6 +49,15 @@ export function FeedbackSheet({
             <p className="text-sm font-medium mt-1 leading-relaxed text-[var(--ink)]">
               {explanation}
             </p>
+            {alsoCorrect && (
+              <p
+                data-testid="feedback-also-correct"
+                className="text-xs font-semibold text-[var(--mayura)] mt-2 flex items-center gap-1.5 bg-[var(--surface)] p-2 rounded-[10px] border border-[var(--line)]"
+              >
+                <span>💡</span>
+                <span>{alsoCorrect}</span>
+              </p>
+            )}
           </div>
         </div>
 

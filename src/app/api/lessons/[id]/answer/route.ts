@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { level0Lesson1 } from "@/lib/curriculum/lesson1";
+import { level0Lesson2 } from "@/lib/curriculum/lesson2";
+import { validateAnswer } from "@/lib/exercises/validation";
 
 export async function POST(
   request: Request,
@@ -8,21 +10,24 @@ export async function POST(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { stepId, selectedOptionId } = body;
+    const { stepId } = body;
 
-    const step = level0Lesson1.steps.find((s) => s.id === stepId);
+    const allSteps = [...level0Lesson1.steps, ...level0Lesson2.steps];
+    const step = allSteps.find((s) => s.id === stepId);
     if (!step || step.type !== "exercise") {
       return NextResponse.json({ error: "Invalid exercise step" }, { status: 400 });
     }
 
-    const exercise = step.content;
-    const isCorrect = exercise.correctOptionId === selectedOptionId;
+    const result = validateAnswer(step.content, body);
 
     return NextResponse.json({
-      correct: isCorrect,
-      correctOptionId: exercise.correctOptionId,
-      explanationEn: exercise.explanationEn,
-      explanationTa: exercise.explanationTa,
+      correct: result.correct,
+      correctOptionId: result.correctOptionId,
+      isAlternativeOrder: result.isAlternativeOrder,
+      alsoCorrectEn: result.alsoCorrectEn,
+      alsoCorrectTa: result.alsoCorrectTa,
+      explanationEn: result.explanationEn,
+      explanationTa: result.explanationTa,
     });
   } catch (error: any) {
     return NextResponse.json(

@@ -6,6 +6,7 @@ export interface LessonContent {
   levelTitleTa: string;
   goalEn: string;
   goalTa: string;
+  estMinutes?: number;
   steps: LessonStepData[];
 }
 

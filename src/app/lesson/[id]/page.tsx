@@ -10,7 +10,13 @@ import { SyllableHighlight } from "@/components/sanskrit/SyllableHighlight";
 import { LessonProgressBar } from "@/components/lesson/LessonProgressBar";
 import { OptionCard } from "@/components/lesson/OptionCard";
 import { FeedbackSheet } from "@/components/lesson/FeedbackSheet";
+import { FillBlankExercise } from "@/components/lesson/exercises/FillBlankExercise";
+import { MatchExercise } from "@/components/lesson/exercises/MatchExercise";
+import { BuildSentenceExercise } from "@/components/lesson/exercises/BuildSentenceExercise";
+import { TransliterateExercise } from "@/components/lesson/exercises/TransliterateExercise";
+import { validateAnswer } from "@/lib/exercises/validation";
 import { level0Lesson1, type LessonContent, type LessonStepData } from "@/lib/curriculum/lesson1";
+import { level0Lesson2 } from "@/lib/curriculum/lesson2";
 import { usePreferencesStore } from "@/stores/preferencesStore";
 import { useTranslation } from "@/i18n/provider";
 import { useAudio } from "@/hooks/useAudio";
@@ -23,16 +29,22 @@ export default function LessonPage() {
   const preferences = usePreferencesStore();
   const audio = useAudio();
 
-  const [lesson, setLesson] = useState<LessonContent>(level0Lesson1);
+  const [lesson, setLesson] = useState<LessonContent>(() => {
+    if (params?.id === "level-0-lesson-2") return level0Lesson2;
+    return level0Lesson1;
+  });
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null);
 
   // Exercise state
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
+  const [matchedPairs, setMatchedPairs] = useState<Array<{ leftId: string; rightId: string }>>([]);
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
   const [feedback, setFeedback] = useState<{
     isCorrect: boolean;
     explanation: string;
+    alsoCorrect?: string;
   } | null>(null);
 
   useEffect(() => {
@@ -58,6 +70,8 @@ export default function LessonPage() {
     setIsAnswerChecked(false);
     setFeedback(null);
     setSelectedOptionId(null);
+    setSelectedTileIds([]);
+    setMatchedPairs([]);
     setSelectedTokenIndex(null);
 
     if (currentStepIndex < totalSteps - 1) {
@@ -76,34 +90,57 @@ export default function LessonPage() {
   };
 
   const handleCheckAnswer = async () => {
-    if (!selectedOptionId || currentStep.type !== "exercise") return;
+    if (currentStep.type !== "exercise") return;
+
+    const exercise = currentStep.content;
+    const isBuildSentence = exercise.exerciseType === "build_sentence";
+    const isMatch = exercise.exerciseType === "match";
+
+    const payload: any = { stepId: currentStep.id };
+    if (isBuildSentence) {
+      payload.selectedTileIds = selectedTileIds;
+    } else if (isMatch) {
+      payload.matchedPairs = matchedPairs;
+    } else {
+      payload.selectedOptionId = selectedOptionId;
+    }
 
     try {
       const res = await fetch(`/api/lessons/${lesson.id}/answer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          stepId: currentStep.id,
-          selectedOptionId,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
       const isCorrect = data.correct;
       const explanation = isTamil ? data.explanationTa : data.explanationEn;
+      const alsoCorrect = isTamil ? data.alsoCorrectTa : data.alsoCorrectEn;
 
       setIsAnswerChecked(true);
-      setFeedback({ isCorrect, explanation });
+      setFeedback({ isCorrect, explanation, alsoCorrect });
     } catch {
-      // Offline fallback check
-      const ex = currentStep.content;
-      const isCorrect = ex.correctOptionId === selectedOptionId;
+      // Offline fallback check using local validation
+      const result = validateAnswer(exercise, payload);
       setIsAnswerChecked(true);
       setFeedback({
-        isCorrect,
-        explanation: isTamil ? ex.explanationTa : ex.explanationEn,
+        isCorrect: result.correct,
+        explanation: isTamil ? result.explanationTa : result.explanationEn,
+        alsoCorrect: isTamil ? result.alsoCorrectTa : result.alsoCorrectEn,
       });
     }
+  };
+
+  const isCheckDisabled = () => {
+    if (currentStep.type !== "exercise") return true;
+    const type = currentStep.content.exerciseType;
+    if (type === "build_sentence") {
+      return selectedTileIds.length === 0;
+    }
+    if (type === "match") {
+      return matchedPairs.length < (currentStep.content.pairs?.length || 0);
+    }
+    return !selectedOptionId;
   };
 
   return (
@@ -303,7 +340,7 @@ export default function LessonPage() {
             </div>
           )}
 
-          {/* STEP 4, 5, 6: EXERCISES */}
+          {/* EXERCISES: ALL TYPES */}
           {currentStep.type === "exercise" && (
             <div className="animate-fadeIn space-y-4">
               <div className="text-center">
@@ -317,7 +354,7 @@ export default function LessonPage() {
                 </h2>
               </div>
 
-              {/* Listen & Choose Audio prompt */}
+              {/* 1. Listen & Choose Exercise */}
               {currentStep.content.exerciseType === "listen_choose" && (
                 <div className="flex flex-col items-center justify-center p-4 bg-[var(--surface)] rounded-[16px] border border-[var(--line)] space-y-2">
                   <AudioButton
@@ -337,38 +374,106 @@ export default function LessonPage() {
                 </div>
               )}
 
-              {/* Options list */}
-              <div className="space-y-3 pt-2">
-                {currentStep.content.options.map((opt: any) => {
-                  let status: "idle" | "correct" | "incorrect" = "idle";
-                  if (isAnswerChecked && feedback) {
-                    if (opt.id === currentStep.content.correctOptionId) {
-                      status = "correct";
-                    } else if (opt.id === selectedOptionId) {
-                      status = "incorrect";
-                    }
-                  }
+              {/* 2. Fill the Blank Exercise */}
+              {currentStep.content.exerciseType === "fill_blank" && (
+                <FillBlankExercise
+                  sentenceBefore={currentStep.content.sentenceBefore}
+                  sentenceAfter={currentStep.content.sentenceAfter}
+                  options={currentStep.content.options}
+                  selectedOptionId={selectedOptionId}
+                  onSelectOption={(optId) => {
+                    if (!isAnswerChecked) setSelectedOptionId(optId);
+                  }}
+                  status={isAnswerChecked ? (feedback?.isCorrect ? "correct" : "incorrect") : "idle"}
+                  correctOptionId={currentStep.content.correctOptionId}
+                  disabled={isAnswerChecked}
+                  script={preferences.script}
+                />
+              )}
 
-                  return (
-                    <OptionCard
-                      key={opt.id}
-                      id={opt.id}
-                      text={opt.text}
-                      helper={opt.helper}
-                      isSelected={selectedOptionId === opt.id}
-                      status={status}
-                      onSelect={() => {
-                        if (!isAnswerChecked) {
-                          setSelectedOptionId(opt.id);
-                          // Play sound option preview
-                          audio.playSingle(opt.helper || opt.text, opt.text === "आ" || opt.text === "ई");
-                        }
-                      }}
-                      disabled={isAnswerChecked}
-                    />
-                  );
-                })}
-              </div>
+              {/* 3. Match Pairs Exercise */}
+              {currentStep.content.exerciseType === "match" && (
+                <MatchExercise
+                  pairs={currentStep.content.pairs}
+                  onMatchesChange={(matched) => setMatchedPairs(matched)}
+                  disabled={isAnswerChecked}
+                />
+              )}
+
+              {/* 4. Build Sentence Exercise */}
+              {currentStep.content.exerciseType === "build_sentence" && (
+                <BuildSentenceExercise
+                  tiles={currentStep.content.tiles}
+                  selectedTileIds={selectedTileIds}
+                  onSelectedTilesChange={(ids) => {
+                    if (!isAnswerChecked) setSelectedTileIds(ids);
+                  }}
+                  disabled={isAnswerChecked}
+                  promptTranslation={
+                    isTamil
+                      ? currentStep.content.promptTranslationTa
+                      : currentStep.content.promptTranslationEn
+                  }
+                  status={isAnswerChecked ? (feedback?.isCorrect ? "correct" : "incorrect") : "idle"}
+                  alsoCorrectNotice={feedback?.alsoCorrect}
+                />
+              )}
+
+              {/* 5. Transliterate Exercise */}
+              {currentStep.content.exerciseType === "transliterate" && (
+                <TransliterateExercise
+                  sourceText={currentStep.content.sourceText}
+                  sourceScriptLabel={currentStep.content.sourceScriptLabel || "Devanāgarī"}
+                  targetScriptLabel={
+                    currentStep.content.targetScriptLabel ||
+                    (preferences.script === "tamil" ? "Tamil" : "IAST")
+                  }
+                  options={currentStep.content.options}
+                  selectedOptionId={selectedOptionId}
+                  onSelectOption={(optId) => {
+                    if (!isAnswerChecked) setSelectedOptionId(optId);
+                  }}
+                  status={isAnswerChecked ? (feedback?.isCorrect ? "correct" : "incorrect") : "idle"}
+                  correctOptionId={currentStep.content.correctOptionId}
+                  disabled={isAnswerChecked}
+                />
+              )}
+
+              {/* 6. Standard Option List (read_script, listen_choose) */}
+              {(currentStep.content.exerciseType === "read_script" ||
+                currentStep.content.exerciseType === "listen_choose") && (
+                <div className="space-y-3 pt-2">
+                  {currentStep.content.options.map((opt: any) => {
+                    let status: "idle" | "correct" | "incorrect" = "idle";
+                    if (isAnswerChecked && feedback) {
+                      if (opt.id === currentStep.content.correctOptionId) {
+                        status = "correct";
+                      } else if (opt.id === selectedOptionId) {
+                        status = "incorrect";
+                      }
+                    }
+
+                    return (
+                      <OptionCard
+                        key={opt.id}
+                        id={opt.id}
+                        text={opt.text}
+                        helper={opt.helper}
+                        isSelected={selectedOptionId === opt.id}
+                        status={status}
+                        onSelect={() => {
+                          if (!isAnswerChecked) {
+                            setSelectedOptionId(opt.id);
+                            // Play sound preview if short vowel
+                            audio.playSingle(opt.helper || opt.text, opt.text === "आ" || opt.text === "ई");
+                          }
+                        }}
+                        disabled={isAnswerChecked}
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -419,7 +524,7 @@ export default function LessonPage() {
                 size="lg"
                 className="w-full text-lg shadow-sm"
                 onClick={handleCheckAnswer}
-                disabled={!selectedOptionId}
+                disabled={isCheckDisabled()}
                 data-testid="lesson-check-btn"
               >
                 {isTamil ? "சரிபார்க்க" : "Check"}
@@ -450,6 +555,7 @@ export default function LessonPage() {
           <FeedbackSheet
             isCorrect={feedback.isCorrect}
             explanation={feedback.explanation}
+            alsoCorrect={feedback.alsoCorrect}
             onContinue={handleNextStep}
             continueText={isTamil ? "அடுத்தது" : "Continue"}
           />

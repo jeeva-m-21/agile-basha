@@ -65,13 +65,13 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 6 — More Exercise Types
 **User Feature:** User practices with fill-the-blank, match, sentence building, and transliteration exercises.
 
-- [ ] Exercise: fill_blank
-- [ ] Exercise: match (drag/tap pairs)
-- [ ] Exercise: build_sentence (word tiles)
-- [ ] Exercise: transliterate
-- [ ] Word tile component with tap-to-place + reorder
-- [ ] Flexible answer acceptance (multiple valid word orders)
-- [ ] **Tests:** Each exercise type rendering and validation
+- [x] Exercise: fill_blank
+- [x] Exercise: match (drag/tap pairs)
+- [x] Exercise: build_sentence (word tiles)
+- [x] Exercise: transliterate
+- [x] Word tile component with tap-to-place + reorder
+- [x] Flexible answer acceptance (multiple valid word orders)
+- [x] **Tests:** Each exercise type rendering and validation
 
 ## Sprint 7 — Spaced Repetition Review
 **User Feature:** User reviews due words/rules in short mixed sessions with SRS scheduling.
