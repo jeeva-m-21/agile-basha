@@ -40,16 +40,16 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 4 — Lesson Engine (Core)
 **User Feature:** User completes a lesson with the see-it → notice-it → rule → exercise → recap flow.
 
-- [ ] DB tables: lesson_steps, exercises
-- [ ] Lesson page (focus mode, no nav, progress bar)
-- [ ] Step rendering by type (see_it, notice_it, rule, exercise, recap)
-- [ ] SanskritText component (script-aware, helper line, tap-to-hear)
-- [ ] Exercise type: multiple choice (read_script, identify_case)
-- [ ] Feedback sheet (correct/incorrect with explanation)
-- [ ] Lesson API: GET /api/lessons/:id, POST answer, POST complete
-- [ ] Progress tracking (user_progress table)
-- [ ] Seed Level 0, Lesson 1 content
-- [ ] **Tests:** Lesson step flow, answer validation, progress save, feedback rendering
+- [x] DB tables: lesson_steps, exercises
+- [x] Lesson page (focus mode, no nav, progress bar)
+- [x] Step rendering by type (see_it, notice_it, rule, exercise, recap)
+- [x] SanskritText component (script-aware, helper line, tap-to-hear)
+- [x] Exercise type: multiple choice (read_script, identify_case)
+- [x] Feedback sheet (correct/incorrect with explanation)
+- [x] Lesson API: GET /api/lessons/:id, POST answer, POST complete
+- [x] Progress tracking (user_progress table)
+- [x] Seed Level 0, Lesson 1 content
+- [x] **Tests:** Lesson step flow, answer validation, progress save, feedback rendering
 
 ## Sprint 5 — Audio & Pronunciation
 **User Feature:** User hears Sanskrit words/sentences with syllable highlighting and speed control.

@@ -43,7 +43,8 @@ A Sanskrit learning platform (PWA) that teaches reading, pronunciation, and gram
 > **Sprint 1 — Project Setup & Landing Page** (COMPLETED)
 > **Sprint 2 — Onboarding Flow** (COMPLETED)
 > **Sprint 3 — Home Screen & Navigation** (COMPLETED)
-> **Sprint 4 — Lesson Engine (Core)** (NEXT)
+> **Sprint 4 — Lesson Engine (Core)** (COMPLETED)
+> **Sprint 5 — Audio & Pronunciation** (NEXT)
 
 See `docs/sprints.md` for the full plan.
 

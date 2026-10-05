@@ -55,6 +55,51 @@ export const lessons = pgTable("lessons", {
   estMinutes: integer("est_minutes").default(10).notNull(),
 });
 
+export const lessonSteps = pgTable("lesson_steps", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  lessonId: text("lesson_id").notNull(),
+  orderNum: integer("order_num").notNull(),
+  stepType: text("step_type", {
+    enum: ["see_it", "notice_it", "rule", "exercise", "say_it", "recap"],
+  }).notNull(),
+  content: jsonb("content").notNull(),
+});
+
+export const exercises = pgTable("exercises", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  stepId: uuid("step_id"),
+  exerciseType: text("exercise_type", {
+    enum: [
+      "read_script",
+      "listen_choose",
+      "match",
+      "fill_blank",
+      "identify_case",
+      "build_sentence",
+      "translate",
+      "transliterate",
+      "split_sandhi",
+      "recall",
+    ],
+  }).notNull(),
+  promptEn: text("prompt_en").notNull(),
+  promptTa: text("prompt_ta").notNull(),
+  content: jsonb("content").notNull(),
+  audioUrl: text("audio_url"),
+});
+
+export const userProgress = pgTable("user_progress", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull(),
+  lessonId: text("lesson_id").notNull(),
+  status: text("status", {
+    enum: ["not_started", "in_progress", "completed"],
+  }).default("in_progress").notNull(),
+  score: integer("score").default(0).notNull(),
+  startedAt: timestamp("started_at", { withTimezone: true }).defaultNow().notNull(),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+});
+
 export const streaks = pgTable("streaks", {
   userId: uuid("user_id")
     .primaryKey()
@@ -73,4 +118,7 @@ export type NewUserPreferences = typeof userPreferences.$inferInsert;
 export type Level = typeof levels.$inferSelect;
 export type Unit = typeof units.$inferSelect;
 export type Lesson = typeof lessons.$inferSelect;
+export type LessonStep = typeof lessonSteps.$inferSelect;
+export type Exercise = typeof exercises.$inferSelect;
+export type UserProgress = typeof userProgress.$inferSelect;
 export type Streak = typeof streaks.$inferSelect;
