@@ -112,13 +112,13 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 10 — Dictionary & Grammar Reference
 **User Feature:** User searches words by any script and sees meanings, forms, grammar with linked lessons.
 
-- [ ] Dictionary search API (GET /api/dictionary/search)
-- [ ] Form analysis API (GET /api/dictionary/analyze)
-- [ ] Dictionary UI (search, results, two tabs: meaning vs form)
-- [ ] Grammar reference pages (DB: grammar_rules)
-- [ ] Link back to lessons from dictionary entries
-- [ ] Search bar integration in top bar
-- [ ] **Tests:** Search across scripts, form analysis accuracy
+- [x] Dictionary search API (GET /api/dictionary/search)
+- [x] Form analysis API (GET /api/dictionary/analyze)
+- [x] Dictionary UI (search, results, two tabs: meaning vs form)
+- [x] Grammar reference pages (DB: grammar_rules, Panini sutras, tables)
+- [x] Link back to lessons from dictionary entries
+- [x] Search bar integration in top bar
+- [x] **Tests:** Search across scripts, form analysis accuracy, UI tabs
 
 ## Sprint 11 — AI Tutor
 **User Feature:** User asks questions about Sanskrit in context and gets grounded answers.

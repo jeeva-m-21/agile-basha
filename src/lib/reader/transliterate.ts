@@ -15,6 +15,7 @@ export function detectScript(text: string): ScriptType {
 
 // Consonant mappings: IAST <-> Devanāgarī
 const IAST_TO_DEVA_CONSONANTS: Array<[string, string]> = [
+  ["cch", "च्छ"],
   ["kṣ", "क्ष"],
   ["jñ", "ज्ञ"],
   ["kh", "ख"],
@@ -209,9 +210,7 @@ export function iastToDevanagari(iast: string): string {
     .replace(/aa/g, "ā")
     .replace(/ii/g, "ī")
     .replace(/uu/g, "ū")
-    .replace(/sh/g, "ś")
-    .replace(/ch/g, "c")
-    .replace(/cch/g, "cch");
+    .replace(/sh/g, "ś");
 
   let out = "";
   let i = 0;

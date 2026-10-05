@@ -23,7 +23,17 @@ export function TopBar({ streakCount = 1, restDayProtected = true }: TopBarProps
           </span>
         </Link>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
+          {/* Dictionary & Grammar Search shortcut */}
+          <Link
+            href="/dictionary"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[var(--ink-2)] hover:text-[var(--ink)] hover:bg-[var(--surface-2)] transition-colors"
+            title="Dictionary & Grammar"
+            data-testid="topbar-search-link"
+          >
+            <Search className="w-4 h-4" />
+          </Link>
+
           {/* Agni streak chip per DESIGN.md §7.2 */}
           <div
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--surface-2)] text-[var(--ink)] border border-[var(--line-strong)]"

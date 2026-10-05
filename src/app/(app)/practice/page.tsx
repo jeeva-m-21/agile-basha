@@ -148,6 +148,33 @@ export default function PracticePage() {
             </div>
           </div>
         </Card>
+
+        {/* Dictionary & Grammar Reference Link */}
+        <Card
+          variant="interactive"
+          className="p-4 flex items-center justify-between border-2 border-[var(--primary)] bg-[var(--surface)]"
+          onClick={() => {
+            window.location.href = "/dictionary";
+          }}
+          data-testid="practice-dictionary-link"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-[var(--primary-tint)] text-[var(--primary)] flex items-center justify-center font-bold text-sm border border-[var(--primary)]">
+              <BookMarked className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="font-bold text-sm text-[var(--ink)]">
+                {isTamil ? "அகராதி & இலக்கணக் கையேடு" : "Dictionary & Grammar Reference"}
+              </div>
+              <div className="text-[11px] text-[var(--ink-2)]">
+                {isTamil ? "வடிவ ஆய்வு, தாதுக்கள், பாணினீய சூத்திரங்கள்" : "Word meanings, form analysis, Pāṇini sūtras"}
+              </div>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-[var(--primary)]">
+            {isTamil ? "திறக்க →" : "Explore →"}
+          </span>
+        </Card>
       </div>
     </main>
   );

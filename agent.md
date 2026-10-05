@@ -49,7 +49,8 @@ A Sanskrit learning platform (PWA) that teaches reading, pronunciation, and gram
 > **Sprint 7 — Spaced Repetition Review** (COMPLETED)
 > **Sprint 8 — Reader (Basic)** (COMPLETED)
 > **Sprint 9 — Reader (AI Translation + Library)** (COMPLETED)
-> **Sprint 10 — Dictionary & Grammar Reference** (NEXT)
+> **Sprint 10 — Dictionary & Grammar Reference** (COMPLETED)
+> **Sprint 11 — AI Tutor** (NEXT)
 
 See `docs/sprints.md` for the full plan.
 

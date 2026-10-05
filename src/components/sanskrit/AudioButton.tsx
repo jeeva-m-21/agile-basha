@@ -3,9 +3,11 @@
 import React from "react";
 import { Volume2, Snail } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAudio } from "@/hooks/useAudio";
 
 export interface AudioButtonProps {
-  onPlay: () => void;
+  onPlay?: () => void;
+  text?: string;
   isPlaying?: boolean;
   isSlow?: boolean;
   onToggleSlow?: () => void;
@@ -16,59 +18,74 @@ export interface AudioButtonProps {
 
 export function AudioButton({
   onPlay,
-  isPlaying = false,
-  isSlow = false,
-  onToggleSlow,
+  text,
+  isPlaying: externalIsPlaying,
+  isSlow: externalIsSlow,
+  onToggleSlow: externalOnToggleSlow,
   showSlowToggle = true,
   className,
   size = "default",
 }: AudioButtonProps) {
+  const internalAudio = useAudio();
+
+  const handlePlay = onPlay
+    ? onPlay
+    : () => {
+        if (text) {
+          internalAudio.playSingle(text, externalIsSlow ?? internalAudio.isSlow);
+        }
+      };
+
+  const isPlaying = externalIsPlaying !== undefined ? externalIsPlaying : internalAudio.isPlaying;
+  const isSlow = externalIsSlow !== undefined ? externalIsSlow : internalAudio.isSlow;
+  const handleToggleSlow = externalOnToggleSlow ?? internalAudio.toggleSlow;
+
   const isSm = size === "sm";
 
   return (
-    <div className={cn("inline-flex items-center gap-3", className)}>
-      {/* Primary 64px speaker circle button per DESIGN.md §6.6 */}
+    <div className={cn("inline-flex items-center gap-2", className)}>
+      {/* Speaker circle button */}
       <button
         type="button"
-        onClick={onPlay}
+        onClick={handlePlay}
         disabled={isPlaying}
         aria-label={isPlaying ? "Audio playing" : "Play pronunciation audio"}
         className={cn(
-          "rounded-full bg-[var(--neel)] text-white flex items-center justify-center border-b-[4px] border-b-[var(--neel-edge)] active:translate-y-[3px] active:border-b-[1px] transition-all shadow-md focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--neel)] select-none",
-          isSm ? "w-12 h-12" : "w-16 h-16",
+          "rounded-full bg-[var(--neel)] text-white flex items-center justify-center border-b-[3px] border-b-[var(--neel-edge)] active:translate-y-[2px] active:border-b-[1px] transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neel)] select-none",
+          isSm ? "w-9 h-9" : "w-16 h-16",
           isPlaying && "brightness-110 shadow-lg animate-pulse"
         )}
         data-testid="audio-play-btn"
       >
         {isPlaying ? (
           /* Animated waveform bars */
-          <div className="flex items-center gap-1" aria-hidden="true">
-            <span className="w-1 bg-white rounded-full animate-bounce [animation-delay:0ms] h-4" />
-            <span className="w-1 bg-white rounded-full animate-bounce [animation-delay:150ms] h-6" />
-            <span className="w-1 bg-white rounded-full animate-bounce [animation-delay:300ms] h-5" />
-            <span className="w-1 bg-white rounded-full animate-bounce [animation-delay:450ms] h-3" />
+          <div className="flex items-center gap-0.5" aria-hidden="true">
+            <span className="w-0.5 bg-white rounded-full animate-bounce [animation-delay:0ms] h-3" />
+            <span className="w-0.5 bg-white rounded-full animate-bounce [animation-delay:150ms] h-4" />
+            <span className="w-0.5 bg-white rounded-full animate-bounce [animation-delay:300ms] h-3" />
           </div>
         ) : (
-          <Volume2 className={cn(isSm ? "w-6 h-6" : "w-8 h-8")} />
+          <Volume2 className={cn(isSm ? "w-4 h-4" : "w-8 h-8")} />
         )}
       </button>
 
-      {/* 44px turtle slow-speed companion per DESIGN.md §6.6 */}
-      {showSlowToggle && onToggleSlow && (
+      {/* Optional turtle slow-speed companion */}
+      {showSlowToggle && (
         <button
           type="button"
-          onClick={onToggleSlow}
+          onClick={handleToggleSlow}
           aria-pressed={isSlow}
           aria-label={isSlow ? "Slow speed enabled" : "Enable slow speed"}
           className={cn(
-            "w-11 h-11 rounded-full border-2 transition-all flex items-center justify-center select-none active:translate-y-[2px]",
+            "rounded-full border-2 transition-all flex items-center justify-center select-none active:translate-y-[2px]",
+            isSm ? "w-8 h-8" : "w-11 h-11",
             isSlow
               ? "bg-[var(--surface-2)] border-[var(--haldi-edge)] text-[var(--haldi-edge)] shadow-xs"
               : "bg-[var(--surface)] border-[var(--line-strong)] text-[var(--ink-2)] hover:bg-[var(--surface-2)]"
           )}
           data-testid="audio-slow-btn"
         >
-          <Snail className="w-5 h-5" />
+          <Snail className={cn(isSm ? "w-4 h-4" : "w-5 h-5")} />
         </button>
       )}
     </div>

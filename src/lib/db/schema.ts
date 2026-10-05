@@ -180,6 +180,26 @@ export const translationsCache = pgTable("translations_cache", {
   cachedAt: timestamp("cached_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const grammarRules = pgTable("grammar_rules", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  slug: text("slug").unique().notNull(),
+  titleEn: text("title_en").notNull(),
+  titleTa: text("title_ta").notNull(),
+  sanskritTerm: text("sanskrit_term").notNull(),
+  sanskritIast: text("sanskrit_iast").notNull(),
+  category: text("category", {
+    enum: ["vibhakti", "sandhi", "lakara", "samasa", "general"],
+  }).notNull(),
+  sutra: text("sutra"),
+  sutraTranslationEn: text("sutra_translation_en"),
+  sutraTranslationTa: text("sutra_translation_ta"),
+  ruleEn: text("rule_en").notNull(),
+  ruleTa: text("rule_ta").notNull(),
+  tableData: jsonb("table_data"),
+  examples: jsonb("examples").notNull(),
+  relatedLessonId: text("related_lesson_id"),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type UserPreferences = typeof userPreferences.$inferSelect;
@@ -196,6 +216,7 @@ export type DbReviewAttempt = typeof reviewAttempts.$inferSelect;
 export type Word = typeof words.$inferSelect;
 export type TextItem = typeof texts.$inferSelect;
 export type TranslationCache = typeof translationsCache.$inferSelect;
+export type GrammarRule = typeof grammarRules.$inferSelect;
 
 
 
