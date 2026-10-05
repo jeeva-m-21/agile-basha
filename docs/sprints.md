@@ -100,14 +100,14 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 9 — Reader (AI Translation + Library)
 **User Feature:** Reader shows AI translation and user can browse curated texts.
 
-- [ ] LLM integration for translation (OpenAI/Gemini)
-- [ ] Translation caching in DB
-- [ ] "AI-assisted translation" labeling
-- [ ] Text library page (GET /api/reader/library)
-- [ ] DB table: texts (seeded with 5-10 curated texts)
-- [ ] "Save word" to personal vocabulary
-- [ ] "You know X of Y words" display
-- [ ] **Tests:** Translation API, caching, library listing
+- [x] LLM / Sarvam AI integration for translation
+- [x] Translation caching in DB and in-memory cache
+- [x] "AI-assisted translation" labeling per SPEC §10.1
+- [x] Text library page / drawer with category filter (GET /api/reader/library)
+- [x] DB table: texts & translations_cache (seeded with 7 curated classical texts)
+- [x] "Save word" to personal vocabulary
+- [x] "You know X of Y words" display
+- [x] **Tests:** Translation API, caching, library listing, category filters
 
 ## Sprint 10 — Dictionary & Grammar Reference
 **User Feature:** User searches words by any script and sees meanings, forms, grammar with linked lessons.

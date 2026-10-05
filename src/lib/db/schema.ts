@@ -154,6 +154,32 @@ export const words = pgTable("words", {
   lessonId: text("lesson_id"),
 });
 
+export const texts = pgTable("texts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  titleEn: text("title_en").notNull(),
+  titleTa: text("title_ta").notNull(),
+  sanskrit: text("sanskrit").notNull(),
+  translationEn: text("translation_en").notNull(),
+  translationTa: text("translation_ta").notNull(),
+  source: text("source").notNull(),
+  translator: text("translator"),
+  isAiTranslated: boolean("is_ai_translated").default(false).notNull(),
+  difficulty: integer("difficulty").default(1).notNull(), // 0-5
+  category: text("category", {
+    enum: ["gita", "subhashita", "stotra", "story", "upanishad"],
+  }).notNull(),
+});
+
+export const translationsCache = pgTable("translations_cache", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  sourceText: text("source_text").notNull(),
+  targetLang: text("target_lang", { enum: ["en", "ta"] }).notNull(),
+  translation: text("translation").notNull(),
+  provider: text("provider").default("sarvam").notNull(),
+  isAiTranslated: boolean("is_ai_translated").default(true).notNull(),
+  cachedAt: timestamp("cached_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type UserPreferences = typeof userPreferences.$inferSelect;
@@ -168,5 +194,8 @@ export type Streak = typeof streaks.$inferSelect;
 export type DbReviewItem = typeof reviewItems.$inferSelect;
 export type DbReviewAttempt = typeof reviewAttempts.$inferSelect;
 export type Word = typeof words.$inferSelect;
+export type TextItem = typeof texts.$inferSelect;
+export type TranslationCache = typeof translationsCache.$inferSelect;
+
 
 
