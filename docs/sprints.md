@@ -29,13 +29,13 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 3 — Home Screen & Navigation
 **User Feature:** User sees their daily plan on Home with lesson, review, and reading cards.
 
-- [ ] Bottom navigation bar (Home, Learn, Read, Practice, Me)
-- [ ] Home screen layout (continue card, review card, reading card, streak)
-- [ ] GET /api/today endpoint
-- [ ] DB tables: levels, units, lessons (seeded with Level 0 structure)
-- [ ] Streak tracking (streaks table, rest day logic)
-- [ ] Empty states with Haṃsa placeholder
-- [ ] **Tests:** Navigation routing, today API response, streak logic
+- [x] Bottom navigation bar (Home, Learn, Read, Practice, Me)
+- [x] Home screen layout (continue card, review card, reading card, streak)
+- [x] GET /api/today endpoint
+- [x] DB tables: levels, units, lessons (seeded with Level 0 structure)
+- [x] Streak tracking (streaks table, rest day logic)
+- [x] Empty states with Haṃsa/Bhāṣā placeholder
+- [x] **Tests:** Navigation routing, today API response, streak logic
 
 ## Sprint 4 — Lesson Engine (Core)
 **User Feature:** User completes a lesson with the see-it → notice-it → rule → exercise → recap flow.
