@@ -1,6 +1,7 @@
 import React from "react";
 import { TopBar } from "@/components/navigation/TopBar";
 import { BottomNav } from "@/components/navigation/BottomNav";
+import { TutorFloatingTrigger } from "@/components/tutor/TutorFloatingTrigger";
 
 export default function AppShellLayout({
   children,
@@ -13,6 +14,7 @@ export default function AppShellLayout({
       <div className="flex-1 pb-20">
         {children}
       </div>
+      <TutorFloatingTrigger />
       <BottomNav />
     </div>
   );

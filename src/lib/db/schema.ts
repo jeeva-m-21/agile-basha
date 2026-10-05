@@ -200,6 +200,32 @@ export const grammarRules = pgTable("grammar_rules", {
   relatedLessonId: text("related_lesson_id"),
 });
 
+export const tutorMessages = pgTable("tutor_messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").default("guest").notNull(),
+  role: text("role", { enum: ["user", "assistant"] }).notNull(),
+  content: text("content").notNull(),
+  context: jsonb("context"),
+  references: jsonb("references"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const tutorReports = pgTable("tutor_reports", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  messageId: text("message_id").notNull(),
+  userQuestion: text("user_question"),
+  assistantAnswer: text("assistant_answer"),
+  reason: text("reason").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const tutorQuota = pgTable("tutor_quota", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull(),
+  date: text("date").notNull(), // YYYY-MM-DD
+  count: integer("count").default(0).notNull(),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type UserPreferences = typeof userPreferences.$inferSelect;
@@ -217,6 +243,8 @@ export type Word = typeof words.$inferSelect;
 export type TextItem = typeof texts.$inferSelect;
 export type TranslationCache = typeof translationsCache.$inferSelect;
 export type GrammarRule = typeof grammarRules.$inferSelect;
+export type TutorMessage = typeof tutorMessages.$inferSelect;
+export type TutorReport = typeof tutorReports.$inferSelect;
 
 
 

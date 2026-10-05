@@ -123,13 +123,14 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 11 — AI Tutor
 **User Feature:** User asks questions about Sanskrit in context and gets grounded answers.
 
-- [ ] Tutor chat panel (bottom sheet / right panel)
-- [ ] Context-aware prompting (lesson, word, text context)
-- [ ] Streaming response display
-- [ ] Response grounding (reference lesson content + grammar DB)
-- [ ] Rate limiting with daily quota
-- [ ] "AI tutor" badge + "Report a problem" on every message
-- [ ] **Tests:** Context passing, rate limiting, response labeling
+- [x] Tutor chat panel (bottom sheet / right panel)
+- [x] Context-aware prompting (lesson, word, text context)
+- [x] Grounded responses with follow-up suggestions
+- [x] Response grounding (reference lesson content + grammar DB)
+- [x] Rate limiting with daily fair-use quota (20 questions/day)
+- [x] "AI tutor" badge + "Report a problem" on every message
+- [x] Persistent floating trigger and AppShell integration
+- [x] **Tests:** Context passing, rate limiting, response labeling, reporting
 
 ## Sprint 12 — Progress & Motivation
 **User Feature:** User sees skill map, level progress, vocabulary count, streaks, and weekly summary.
