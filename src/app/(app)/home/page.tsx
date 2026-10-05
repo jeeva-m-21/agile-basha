@@ -156,7 +156,7 @@ export default function HomePage() {
       </Card>
 
       {/* 2. Review Card (Secondary Action) */}
-      <Link href="/practice" className="block">
+      <Link href="/review" className="block">
         <Card
           variant="flat"
           className="p-4 flex items-center justify-between hover:bg-[var(--surface-2)] transition-colors cursor-pointer"
@@ -167,15 +167,23 @@ export default function HomePage() {
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-bold text-[15px] text-[var(--ink)]">
-                {isTamil ? "தினசரி மீள்பார்வை" : "Daily Review"}
+              <div className="font-bold text-[15px] text-[var(--ink)] flex items-center gap-2">
+                <span>{isTamil ? "தினசரி மீள்பார்வை" : "Daily Review"}</span>
+                {data && data.review.dueCount > 0 && (
+                  <span
+                    data-testid="home-review-due-badge"
+                    className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[var(--haldi-tint)] text-[var(--ink)] border border-[var(--haldi)]"
+                  >
+                    {data.review.dueCount} {isTamil ? "உள்ளது" : "due"}
+                  </span>
+                )}
               </div>
               <div className="text-xs text-[var(--ink-2)]">
                 {data?.review.dueCount === 0
                   ? isTamil
                     ? data.review.messageTa
                     : data.review.messageEn
-                  : `${data?.review.dueCount} ${isTamil ? "சொற்கள் மீள்பார்வைக்கு உள்ளன" : "items due"}`}
+                  : `${data?.review.dueCount} ${isTamil ? "சொற்கள் மீள்பார்வைக்கு உள்ளன" : "items due (≈4 min)"}`}
               </div>
             </div>
           </div>

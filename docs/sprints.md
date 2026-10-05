@@ -76,13 +76,13 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 7 — Spaced Repetition Review
 **User Feature:** User reviews due words/rules in short mixed sessions with SRS scheduling.
 
-- [ ] SM-2 algorithm implementation (lib/srs/sm2.ts)
-- [ ] DB tables: review_items, review_attempts
-- [ ] Review session API (GET session, POST answer)
-- [ ] Review screen with mixed item types
-- [ ] "Items due" count on Home
-- [ ] Mark "I know this" / "Reset" controls
-- [ ] **Tests:** SM-2 interval calculation, review session generation, due item counting
+- [x] SM-2 algorithm implementation (lib/srs/sm2.ts)
+- [x] DB tables: review_items, review_attempts
+- [x] Review session API (GET session, POST answer)
+- [x] Review screen with mixed item types
+- [x] "Items due" count on Home
+- [x] Mark "I know this" / "Reset" controls
+- [x] **Tests:** SM-2 interval calculation, review session generation, due item counting
 
 ## Sprint 8 — Reader (Basic)
 **User Feature:** User pastes Sanskrit text and sees word-by-word breakdown with meanings.

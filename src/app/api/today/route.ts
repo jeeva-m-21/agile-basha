@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { curriculumLevels } from "@/lib/curriculum/data";
 import { memoryDb } from "@/lib/db/client";
 import { getStartOfWeek } from "@/lib/progress/streak";
+import { reviewStore } from "@/lib/srs/storage";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -57,11 +58,20 @@ export async function GET(request: Request) {
     weeklyGoalDays: 5,
   };
 
+  const dueCount = reviewStore.getDueCount(userId);
+  const estMinutes = dueCount > 0 ? Math.max(1, Math.ceil(dueCount * 0.75)) : 0;
+
   const review = {
-    dueCount: 0,
-    estMinutes: 0,
-    messageEn: "Your first reviews appear tomorrow.",
-    messageTa: "உங்கள் முதல் மீள்பார்வை நாளை தோன்றும்.",
+    dueCount,
+    estMinutes,
+    messageEn:
+      dueCount > 0
+        ? `${dueCount} items due for review (≈${estMinutes} min)`
+        : "All caught up! No reviews due right now.",
+    messageTa:
+      dueCount > 0
+        ? `${dueCount} உருப்படிகள் மீள்பார்வைக்கு உள்ளன (≈${estMinutes} நிமி)`
+        : "அனைத்தும் முடிந்தது! தற்போது மீள்பார்வை இல்லை.",
   };
 
   return NextResponse.json({

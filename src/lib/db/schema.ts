@@ -111,6 +111,37 @@ export const streaks = pgTable("streaks", {
   restDayWeekStart: date("rest_day_week_start"),
 });
 
+export const reviewItems = pgTable("review_items", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull(),
+  itemType: text("item_type", {
+    enum: ["word", "grammar_rule", "vowel", "sentence"],
+  }).notNull(),
+  itemId: text("item_id"),
+  sanskrit: text("sanskrit").notNull(),
+  iast: text("iast").notNull(),
+  tamilScript: text("tamil_script").notNull(),
+  meaningEn: text("meaning_en").notNull(),
+  meaningTa: text("meaning_ta").notNull(),
+  explanationEn: text("explanation_en"),
+  explanationTa: text("explanation_ta"),
+  nextDue: timestamp("next_due", { withTimezone: true }).defaultNow().notNull(),
+  intervalDays: integer("interval_days").default(1).notNull(),
+  easeFactor: text("ease_factor").default("2.5").notNull(),
+  repCount: integer("rep_count").default(0).notNull(),
+  lastReviewed: timestamp("last_reviewed", { withTimezone: true }),
+});
+
+export const reviewAttempts = pgTable("review_attempts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  reviewItemId: uuid("review_item_id")
+    .references(() => reviewItems.id, { onDelete: "cascade" })
+    .notNull(),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true }).defaultNow().notNull(),
+  quality: integer("quality").notNull(),
+  action: text("action", { enum: ["rate", "know_this", "reset"] }).default("rate").notNull(),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type UserPreferences = typeof userPreferences.$inferSelect;
@@ -122,3 +153,6 @@ export type LessonStep = typeof lessonSteps.$inferSelect;
 export type Exercise = typeof exercises.$inferSelect;
 export type UserProgress = typeof userProgress.$inferSelect;
 export type Streak = typeof streaks.$inferSelect;
+export type DbReviewItem = typeof reviewItems.$inferSelect;
+export type DbReviewAttempt = typeof reviewAttempts.$inferSelect;
+

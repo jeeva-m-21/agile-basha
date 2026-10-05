@@ -8,7 +8,21 @@ import { Sparkles, Layers, RefreshCw, BookMarked } from "lucide-react";
 
 export default function PracticePage() {
   const { language } = useTranslation();
+  const [dueCount, setDueCount] = React.useState<number>(0);
+  const [estMinutes, setEstMinutes] = React.useState<number>(0);
   const isTamil = language === "ta";
+
+  React.useEffect(() => {
+    fetch("/api/review")
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data?.dueCount === "number") {
+          setDueCount(data.dueCount);
+          setEstMinutes(data.estMinutes || Math.max(1, Math.ceil(data.dueCount * 0.75)));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <main className="max-w-md w-full mx-auto px-4 py-5 space-y-4">
@@ -22,24 +36,40 @@ export default function PracticePage() {
       </div>
 
       {/* Review Queue Card */}
-      <Card variant="flat" className="p-5 border-2 border-[var(--line-strong)] bg-[var(--surface)] space-y-3">
+      <Card variant="flat" className="p-5 border-2 border-[var(--line-strong)] bg-[var(--surface)] space-y-3" data-testid="practice-review-card">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-10 h-10 rounded-[12px] bg-[var(--surface-2)] text-[var(--haldi-edge)] flex items-center justify-center font-bold">
               <RefreshCw className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-bold text-base text-[var(--ink)]">
-                {isTamil ? "மீள்பார்வை வரிசை" : "Due for Review"}
+              <div className="font-bold text-base text-[var(--ink)] flex items-center gap-2">
+                <span>{isTamil ? "மீள்பார்வை வரிசை" : "Due for Review"}</span>
+                {dueCount > 0 && (
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[var(--haldi-tint)] text-[var(--ink)] border border-[var(--haldi)]">
+                    {dueCount}
+                  </span>
+                )}
               </div>
               <div className="text-xs text-[var(--ink-2)]">
-                0 {isTamil ? "சொற்கள் மீதமுள்ளன" : "items due today"}
+                {dueCount > 0
+                  ? `${dueCount} ${isTamil ? "உருப்படிகள் தயார்" : "items ready"} (≈${estMinutes} min)`
+                  : isTamil ? "0 சொற்கள் மீதமுள்ளன" : "0 items due today"}
               </div>
             </div>
           </div>
-          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[var(--tulsi-tint)] text-[var(--tulsi-ink)] border border-[var(--tulsi)]">
-            {isTamil ? "அனைத்தும் முடிந்தது" : "All caught up"}
-          </span>
+          {dueCount > 0 ? (
+            <a
+              href="/review"
+              className="text-xs font-bold px-3 py-1.5 rounded-full bg-[var(--haldi)] text-[var(--ink)] border border-[var(--haldi-edge)] shadow-xs hover:brightness-105"
+            >
+              {isTamil ? "தொடங்கு →" : "Start →"}
+            </a>
+          ) : (
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[var(--tulsi-tint)] text-[var(--tulsi-ink)] border border-[var(--tulsi)]">
+              {isTamil ? "அனைத்தும் முடிந்தது" : "All caught up"}
+            </span>
+          )}
         </div>
 
         <p className="text-xs text-[var(--ink-2)]">
@@ -47,6 +77,22 @@ export default function PracticePage() {
             ? "நீங்கள் கற்கும் புதிய சொற்களும் இலக்கண விதிகளும் தானாகவே உங்கள் மறுஆய்வு அட்டவணையில் சேரும்."
             : "Words and grammar rules you meet in lessons automatically enter your review schedule."}
         </p>
+
+        {dueCount > 0 && (
+          <div className="pt-1">
+            <Button
+              variant="primary"
+              size="md"
+              className="w-full text-sm font-bold shadow-xs"
+              onClick={() => {
+                window.location.href = "/review";
+              }}
+              data-testid="practice-start-review-btn"
+            >
+              {isTamil ? "மீள்பார்வையைத் தொடங்கு" : "Start Spaced Review"}
+            </Button>
+          </div>
+        )}
       </Card>
 
       {/* Practice by Topic Cards */}
