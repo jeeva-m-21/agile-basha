@@ -14,7 +14,7 @@ describe("Lesson API Routes", () => {
     expect(response.status).toBe(200);
     expect(data.lesson).toBeTruthy();
     expect(data.lesson.id).toBe("level-0-lesson-1");
-    expect(data.lesson.steps.length).toBe(7);
+    expect(data.lesson.steps.length).toBe(8);
 
     // Verify step types
     const types = data.lesson.steps.map((s: any) => s.type);

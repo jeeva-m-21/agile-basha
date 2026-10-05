@@ -54,13 +54,13 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 5 — Audio & Pronunciation
 **User Feature:** User hears Sanskrit words/sentences with syllable highlighting and speed control.
 
-- [ ] AudioButton component (play, slow speed)
-- [ ] Syllable highlight sync (timestamps from word data)
-- [ ] Audio file serving from Supabase Storage
-- [ ] Service worker setup for audio caching
-- [ ] Exercise type: listen_and_choose
-- [ ] Seed audio for Level 0 Lesson 1 words
-- [ ] **Tests:** Audio playback, syllable sync, offline audio
+- [x] AudioButton component (play, slow speed)
+- [x] Syllable highlight sync (timestamps from word data)
+- [x] Audio file serving from Supabase Storage
+- [x] Service worker setup for audio caching
+- [x] Exercise type: listen_and_choose
+- [x] Seed audio for Level 0 Lesson 1 words
+- [x] **Tests:** Audio playback, syllable sync, offline audio
 
 ## Sprint 6 — More Exercise Types
 **User Feature:** User practices with fill-the-blank, match, sentence building, and transliteration exercises.

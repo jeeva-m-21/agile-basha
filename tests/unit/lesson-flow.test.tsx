@@ -36,10 +36,12 @@ describe("Lesson Engine Loop", () => {
     );
   };
 
-  it("renders Step 1 (See It) with primary Sanskrit hero display", () => {
+  it("renders Step 1 (See It) with primary Sanskrit hero display and audio button", () => {
     renderLesson();
     expect(screen.getByText(/see the first five sounds/i)).toBeInTheDocument();
-    expect(screen.getByText("अ आ इ ई उ")).toBeInTheDocument();
+    expect(screen.getByTestId("syllable-highlight-container")).toBeInTheDocument();
+    expect(screen.getByTestId("syllable-0")).toHaveTextContent("अ");
+    expect(screen.getByTestId("audio-play-btn")).toBeInTheDocument();
     expect(screen.getByTestId("lesson-continue-btn")).toBeInTheDocument();
   });
 
@@ -111,8 +113,8 @@ describe("Lesson Engine Loop", () => {
   it("completes the lesson and navigates back to Home upon completion", async () => {
     renderLesson();
 
-    // Advance through the steps to reach Step 7 (Recap)
-    for (let i = 0; i < 6; i++) {
+    // Advance through the steps to reach Step 8 (Recap)
+    for (let i = 0; i < 7; i++) {
       const btn = screen.queryByTestId("lesson-continue-btn");
       if (btn) {
         fireEvent.click(btn);

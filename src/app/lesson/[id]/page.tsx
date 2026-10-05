@@ -5,19 +5,23 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { SanskritText } from "@/components/sanskrit/SanskritText";
+import { AudioButton } from "@/components/sanskrit/AudioButton";
+import { SyllableHighlight } from "@/components/sanskrit/SyllableHighlight";
 import { LessonProgressBar } from "@/components/lesson/LessonProgressBar";
 import { OptionCard } from "@/components/lesson/OptionCard";
 import { FeedbackSheet } from "@/components/lesson/FeedbackSheet";
 import { level0Lesson1, type LessonContent, type LessonStepData } from "@/lib/curriculum/lesson1";
 import { usePreferencesStore } from "@/stores/preferencesStore";
 import { useTranslation } from "@/i18n/provider";
-import { Volume2, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
+import { useAudio } from "@/hooks/useAudio";
+import { Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function LessonPage() {
   const router = useRouter();
   const params = useParams();
   const { language } = useTranslation();
   const preferences = usePreferencesStore();
+  const audio = useAudio();
 
   const [lesson, setLesson] = useState<LessonContent>(level0Lesson1);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -50,6 +54,7 @@ export default function LessonPage() {
   const totalSteps = lesson.steps.length;
 
   const handleNextStep = async () => {
+    audio.stop();
     setIsAnswerChecked(false);
     setFeedback(null);
     setSelectedOptionId(null);
@@ -109,7 +114,10 @@ export default function LessonPage() {
           <LessonProgressBar
             currentStep={currentStepIndex + 1}
             totalSteps={totalSteps}
-            onClose={() => router.push("/home")}
+            onClose={() => {
+              audio.stop();
+              router.push("/home");
+            }}
           />
         </div>
       </header>
@@ -132,23 +140,61 @@ export default function LessonPage() {
                 </p>
               </div>
 
-              {/* Big Sanskrit Display Card */}
-              <Card variant="flat" className="p-8 bg-[var(--surface)] shadow-xs">
-                <SanskritText
-                  script={preferences.script}
-                  size="hero"
-                  helperText={
-                    preferences.helperLine !== "off"
-                      ? currentStep.content.transliteration
-                      : undefined
-                  }
-                >
-                  {preferences.script === "tamil"
-                    ? currentStep.content.tamilScript
-                    : currentStep.content.sanskrit}
-                </SanskritText>
+              {/* Big Sanskrit Display Card with Syllable Highlight sync */}
+              <Card variant="flat" className="p-8 bg-[var(--surface)] shadow-xs space-y-6">
+                {currentStep.content.syllables ? (
+                  <SyllableHighlight
+                    syllables={currentStep.content.syllables}
+                    activeIndex={audio.activeSyllableIndex}
+                    script={preferences.script}
+                    showHelper={preferences.helperLine !== "off"}
+                    onSyllableClick={(idx) => {
+                      const s = currentStep.content.syllables[idx];
+                      audio.playSingle(s.iast, s.isLong);
+                    }}
+                  />
+                ) : (
+                  <SanskritText
+                    script={preferences.script}
+                    size="hero"
+                    helperText={
+                      preferences.helperLine !== "off"
+                        ? currentStep.content.transliteration
+                        : undefined
+                    }
+                  >
+                    {preferences.script === "tamil"
+                      ? currentStep.content.tamilScript
+                      : currentStep.content.sanskrit}
+                  </SanskritText>
+                )}
 
-                <div className="mt-6 pt-4 border-t border-[var(--line)] text-sm text-[var(--ink-2)]">
+                {/* 64px Audio Button & 44px Turtle Slow Companion per DESIGN.md §6.6 */}
+                <div className="flex flex-col items-center gap-2 pt-2">
+                  <AudioButton
+                    onPlay={() => {
+                      if (currentStep.content.syllables) {
+                        audio.playSyllables(currentStep.content.syllables);
+                      } else {
+                        audio.playSingle("a", false);
+                      }
+                    }}
+                    isPlaying={audio.isPlaying}
+                    isSlow={audio.isSlow}
+                    onToggleSlow={audio.toggleSlow}
+                  />
+                  <span className="text-[11px] font-semibold text-[var(--ink-3)]">
+                    {audio.isSlow
+                      ? isTamil
+                        ? "மெதுவான வேகம் (0.7x)"
+                        : "Slow speed (0.7x)"
+                      : isTamil
+                      ? "ஒலி கேட்க தட்டவும்"
+                      : "Tap to hear pronunciation"}
+                  </span>
+                </div>
+
+                <div className="pt-4 border-t border-[var(--line)] text-sm text-[var(--ink-2)]">
                   {isTamil
                     ? currentStep.content.translationTa
                     : currentStep.content.translationEn}
@@ -179,9 +225,10 @@ export default function LessonPage() {
                     <button
                       key={token.char}
                       type="button"
-                      onClick={() =>
-                        setSelectedTokenIndex(isSelected ? null : idx)
-                      }
+                      onClick={() => {
+                        setSelectedTokenIndex(isSelected ? null : idx);
+                        audio.playSingle(token.iast, token.nameEn.includes("Long"));
+                      }}
                       className={`h-16 rounded-[14px] font-bold text-2xl border-2 transition-all flex flex-col items-center justify-center ${
                         isSelected
                           ? "bg-[var(--neel-tint)] border-[var(--neel)] text-[var(--neel-edge)] shadow-xs scale-105"
@@ -213,7 +260,7 @@ export default function LessonPage() {
                 </Card>
               ) : (
                 <div className="text-center text-xs text-[var(--ink-3)] italic py-2">
-                  {isTamil ? "விவரம் காண ஒரு ஒலியைத் தட்டவும்" : "Tap any sound above to inspect details"}
+                  {isTamil ? "ஒலியைக் கேட்கவும் விவரம் காணவும் தட்டவும்" : "Tap any sound above to hear and inspect details"}
                 </div>
               )}
             </div>
@@ -256,7 +303,7 @@ export default function LessonPage() {
             </div>
           )}
 
-          {/* STEP 4, 5, 6: EXERCISE */}
+          {/* STEP 4, 5, 6: EXERCISES */}
           {currentStep.type === "exercise" && (
             <div className="animate-fadeIn space-y-4">
               <div className="text-center">
@@ -269,6 +316,26 @@ export default function LessonPage() {
                     : currentStep.content.promptEn}
                 </h2>
               </div>
+
+              {/* Listen & Choose Audio prompt */}
+              {currentStep.content.exerciseType === "listen_choose" && (
+                <div className="flex flex-col items-center justify-center p-4 bg-[var(--surface)] rounded-[16px] border border-[var(--line)] space-y-2">
+                  <AudioButton
+                    onPlay={() =>
+                      audio.playSingle(
+                        currentStep.content.soundToPlay,
+                        currentStep.content.soundIsLong
+                      )
+                    }
+                    isPlaying={audio.isPlaying}
+                    isSlow={audio.isSlow}
+                    onToggleSlow={audio.toggleSlow}
+                  />
+                  <span className="text-xs text-[var(--ink-2)] font-medium">
+                    {isTamil ? "ஒலியைக் கேட்க தட்டவும்" : "Tap speaker to listen"}
+                  </span>
+                </div>
+              )}
 
               {/* Options list */}
               <div className="space-y-3 pt-2">
@@ -291,7 +358,11 @@ export default function LessonPage() {
                       isSelected={selectedOptionId === opt.id}
                       status={status}
                       onSelect={() => {
-                        if (!isAnswerChecked) setSelectedOptionId(opt.id);
+                        if (!isAnswerChecked) {
+                          setSelectedOptionId(opt.id);
+                          // Play sound option preview
+                          audio.playSingle(opt.helper || opt.text, opt.text === "आ" || opt.text === "ई");
+                        }
                       }}
                       disabled={isAnswerChecked}
                     />
