@@ -135,14 +135,14 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 12 — Progress & Motivation
 **User Feature:** User sees skill map, level progress, vocabulary count, streaks, and weekly summary.
 
-- [ ] Skill map visualization (Learn tab)
-- [ ] Level progress bar with "You can now..." statements
-- [ ] Vocabulary count display
-- [ ] Weekly summary card
-- [ ] Streak display with rest day logic
-- [ ] Lesson complete celebration sequence
-- [ ] DB table: user_skills
-- [ ] **Tests:** Skill state transitions, progress calculations, streak rules
+- [x] Skill map visualization (Learn tab)
+- [x] Level progress bar with "You can now..." statements
+- [x] Vocabulary count display
+- [x] Weekly summary card
+- [x] Streak display with rest day logic
+- [x] Lesson complete celebration sequence
+- [x] DB table: user_skills
+- [x] **Tests:** Skill state transitions, progress calculations, streak rules
 
 ## Sprint 13 — Offline & PWA
 **User Feature:** User can continue lessons without internet; app installable on phone.

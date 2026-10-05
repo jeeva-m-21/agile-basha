@@ -226,6 +226,16 @@ export const tutorQuota = pgTable("tutor_quota", {
   count: integer("count").default(0).notNull(),
 });
 
+export const userSkills = pgTable("user_skills", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").default("guest").notNull(),
+  skillId: text("skill_id").notNull(),
+  state: text("state", { enum: ["locked", "in_progress", "mastered"] }).default("locked").notNull(),
+  masteryPercentage: integer("mastery_percentage").default(0).notNull(),
+  unlockedAt: timestamp("unlocked_at", { withTimezone: true }),
+  masteredAt: timestamp("mastered_at", { withTimezone: true }),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type UserPreferences = typeof userPreferences.$inferSelect;
@@ -245,6 +255,7 @@ export type TranslationCache = typeof translationsCache.$inferSelect;
 export type GrammarRule = typeof grammarRules.$inferSelect;
 export type TutorMessage = typeof tutorMessages.$inferSelect;
 export type TutorReport = typeof tutorReports.$inferSelect;
+export type UserSkill = typeof userSkills.$inferSelect;
 
 
 

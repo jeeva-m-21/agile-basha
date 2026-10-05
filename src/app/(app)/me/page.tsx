@@ -1,19 +1,31 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { WeeklySummaryCard } from "@/components/progress/WeeklySummaryCard";
+import { computeProgressSummary, ProgressSummary } from "@/lib/progress/skills";
 import { usePreferencesStore } from "@/stores/preferencesStore";
-import { useTranslation, type Language } from "@/i18n/provider";
-import { User, Settings, Globe, Type, Clock, ShieldCheck, Flame } from "lucide-react";
+import { useTranslation } from "@/i18n/provider";
+import { User, Globe, Type, Clock, ShieldCheck, Flame, BookCheck, RefreshCw } from "lucide-react";
 
 export default function MePage() {
   const preferences = usePreferencesStore();
   const { language, setLanguage } = useTranslation();
   const isTamil = language === "ta";
 
+  const [progress, setProgress] = useState<ProgressSummary>(() => computeProgressSummary());
+
   useEffect(() => {
     preferences.loadPreferences();
+    fetch("/api/progress/summary")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.stats) {
+          setProgress(data);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   return (
@@ -28,29 +40,52 @@ export default function MePage() {
             {isTamil ? "என் கணக்கு" : "My Profile"}
           </h1>
           <p className="text-xs text-[var(--ink-2)]">
-            {isTamil ? "விருப்பத்தேர்வுகள் & முன்னேற்றம்" : "Learner Settings & Preferences"}
+            {isTamil ? "விருப்பத்தேர்வுகள் & முன்னேற்றம்" : "Learner Settings & Progress"}
           </p>
         </div>
       </div>
 
-      {/* Stats Summary */}
-      <div className="grid grid-cols-2 gap-3">
-        <Card variant="flat" className="p-3.5 text-center">
-          <div className="text-2xl font-bold text-[var(--ink)]">0</div>
-          <div className="text-xs text-[var(--ink-2)] mt-0.5">
-            {isTamil ? "கற்ற சொற்கள்" : "Words Learned"}
+      {/* Vocabulary Count Card per SPEC §13.1 */}
+      <Card
+        variant="flat"
+        className="p-4 border-2 border-[var(--line-strong)] bg-[var(--surface)] space-y-3"
+        data-testid="vocabulary-count-card"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <BookCheck className="w-5 h-5 text-[var(--tulsi)]" />
+            <div>
+              <div className="font-bold text-sm text-[var(--ink)]">
+                {isTamil ? "சொற்களஞ்சியம் (Vocabulary)" : "Vocabulary Count"}
+              </div>
+              <div className="text-xs text-[var(--ink-2)]">
+                {progress.stats.wordsLearned} of {progress.stats.vocabularyCount} words mastered
+              </div>
+            </div>
           </div>
-        </Card>
-        <Card variant="flat" className="p-3.5 text-center">
-          <div className="text-2xl font-bold text-[var(--agni)] flex items-center justify-center gap-1">
-            <Flame className="w-5 h-5 fill-current" />
-            1
-          </div>
-          <div className="text-xs text-[var(--ink-2)] mt-0.5">
-            {isTamil ? "தொடர் நாட்கள் (Streak)" : "Day Streak"}
-          </div>
-        </Card>
-      </div>
+
+          {progress.stats.wordsDueForReview > 0 && (
+            <a
+              href="/review"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--haldi-tint)] text-[var(--ink)] border border-[var(--haldi)] text-xs font-bold hover:brightness-105"
+            >
+              <RefreshCw className="w-3 h-3 text-[var(--haldi-edge)]" />
+              <span>{progress.stats.wordsDueForReview} due</span>
+            </a>
+          )}
+        </div>
+      </Card>
+
+      {/* Weekly Summary Card per SPEC §13.1 & §13.2 */}
+      <WeeklySummaryCard
+        minutesPracticed={progress.stats.minutesPracticedWeek}
+        wordsLearned={progress.stats.wordsLearned}
+        lessonsCompleted={progress.stats.lessonsCompletedWeek}
+        daysActive={progress.stats.daysActiveWeek}
+        streakDays={progress.stats.streakDays}
+        restDayProtected={progress.stats.restDayProtected}
+        isTamil={isTamil}
+      />
 
       {/* Settings Section */}
       <div className="space-y-3">
