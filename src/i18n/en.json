@@ -1,0 +1,77 @@
+{
+  "common": {
+    "appName": "Haṃsa",
+    "continue": "Continue",
+    "skip": "Skip",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "start": "Start",
+    "save": "Save"
+  },
+  "onboarding": {
+    "stepOf": "Step {current} of {total}",
+    "step1": {
+      "title": "I'd like to learn in…",
+      "subtitle": "Choose your primary language for explanations and grammar.",
+      "en": "English",
+      "enDesc": "Learn Sanskrit with clear explanations in English",
+      "ta": "தமிழ் (Tamil)",
+      "taDesc": "தமிழ் இலக்கண ஒப்புமைகளுடன் சமஸ்கிருதம் பயிலுங்கள்"
+    },
+    "step2": {
+      "title": "Show Sanskrit in…",
+      "subtitle": "You can change this at any time in Settings.",
+      "devanagari": "Devanāgarī",
+      "devanagariDesc": "The traditional script for Sanskrit",
+      "tamil": "Tamil script (with Grantha)",
+      "tamilDesc": "A gentle bridge using letters you already know",
+      "iast": "Roman (IAST)",
+      "iastDesc": "Standard international academic transliteration",
+      "previewLabel": "Preview"
+    },
+    "step3": {
+      "title": "Helper line under Sanskrit",
+      "subtitle": "A subtle second line to help you sound out the words.",
+      "off": "Off",
+      "offDesc": "Read only the main script",
+      "roman": "Roman transliteration",
+      "romanDesc": "Shows IAST diacritics under the main script",
+      "tamil": "Tamil-script transliteration",
+      "tamilDesc": "Shows pronunciation guide in Tamil script"
+    },
+    "step4": {
+      "title": "What's your goal?",
+      "subtitle": "Select one or more to personalize your journey.",
+      "mantras": "Understand mantras & stotras I recite",
+      "gita": "Read the Bhagavad Gītā in the original",
+      "literature": "Read classical Sanskrit literature",
+      "grammar": "Master Sanskrit grammar step by step",
+      "general": "General curiosity and cultural interest"
+    },
+    "step5": {
+      "title": "What's your level?",
+      "subtitle": "We will place you at the right starting lesson.",
+      "beginner": "Complete beginner",
+      "beginnerDesc": "Start from zero: sounds, letters, and syllables (Level 0)",
+      "some": "I know some Sanskrit",
+      "someDesc": "Refresher path or placement quiz (Levels 1-2)"
+    },
+    "step6": {
+      "title": "Daily time commitment",
+      "subtitle": "Short, regular sessions build effortless momentum.",
+      "min5": "5 minutes / day",
+      "min5Desc": "Casual: 1 review or quick drill",
+      "min10": "10 minutes / day",
+      "min10Desc": "Recommended: 1 lesson + review",
+      "min20": "20 minutes / day",
+      "min20Desc": "Deep study: lesson + review + reading"
+    },
+    "complete": {
+      "title": "Your journey begins!",
+      "readyDesc": "Your personalized learning path is set up. Let's start with your first lesson.",
+      "startLesson1": "Start Lesson 1",
+      "goToHome": "Go to Home"
+    }
+  }
+}

@@ -17,14 +17,14 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 2 — Onboarding Flow
 **User Feature:** New user completes onboarding (language, script, goal, level, daily time) and lands on Home.
 
-- [ ] Supabase project setup (auth, database)
-- [ ] Drizzle ORM setup + initial migration (users, user_preferences)
-- [ ] Onboarding multi-step form (6 steps)
-- [ ] Live script preview (Devanāgarī / Tamil / IAST) on script selection
-- [ ] Preferences API (POST /api/onboarding/preferences)
-- [ ] Persist preferences to DB
-- [ ] i18n setup (en.json / ta.json) — onboarding strings
-- [ ] **Tests:** Onboarding flow E2E, preference persistence, i18n switching
+- [x] Supabase project setup (auth, database)
+- [x] Drizzle ORM setup + initial migration (users, user_preferences)
+- [x] Onboarding multi-step form (6 steps)
+- [x] Live script preview (Devanāgarī / Tamil / IAST) on script selection
+- [x] Preferences API (POST /api/onboarding/preferences)
+- [x] Persist preferences to DB
+- [x] i18n setup (en.json / ta.json) — onboarding strings
+- [x] **Tests:** Onboarding flow E2E, preference persistence, i18n switching
 
 ## Sprint 3 — Home Screen & Navigation
 **User Feature:** User sees their daily plan on Home with lesson, review, and reading cards.

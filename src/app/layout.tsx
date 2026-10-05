@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 import { baloo2, notoSans, notoSansDevanagari, notoSansTamil } from "@/styles/fonts";
+import { I18nProvider } from "@/i18n/provider";
 
 export const metadata: Metadata = {
   title: "Haṃsa — Learn Sanskrit step by step",
@@ -26,7 +27,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-[var(--paper)] text-[var(--ink)] antialiased transition-colors duration-150">
-        {children}
+        <I18nProvider>{children}</I18nProvider>
       </body>
     </html>
   );
