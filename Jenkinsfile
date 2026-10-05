@@ -81,7 +81,7 @@ pipeline {
         stage('Push Docker Image') {
             when {
                 allOf {
-                    params.PUSH_IMAGE
+                    expression { return params.PUSH_IMAGE }
                     anyOf {
                         branch 'main'
                         expression { return params.FORCE_DEPLOY }
