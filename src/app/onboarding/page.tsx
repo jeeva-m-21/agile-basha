@@ -547,7 +547,7 @@ export default function OnboardingPage() {
           {step === 7 && (
             <div className="animate-fadeIn py-6 text-center flex flex-col items-center">
               <div className="w-16 h-16 rounded-[20px] bg-[var(--surface-2)] border-2 border-[var(--line-strong)] flex items-center justify-center font-bold text-3xl text-[var(--ink)] font-serif mb-6 shadow-sm">
-                हं
+                भा
               </div>
 
               <h1 className="text-2xl sm:text-3xl font-bold text-[var(--ink)] mb-2">

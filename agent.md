@@ -1,10 +1,10 @@
-# Agent Guide — Haṃsa (Sanskrit Learning Platform)
+# Agent Guide — Bhāṣā (Sanskrit Learning Platform)
 
 This file is the AI agent's cross-session reference. Read this first in every session.
 
 ## What is this project?
 
-A Sanskrit learning platform (PWA) that teaches reading, pronunciation, and grammar through structured lessons, spaced repetition, and a tap-to-understand Reader. Supports English and Tamil learners. Working name: Haṃsa.
+A Sanskrit learning platform (PWA) that teaches reading, pronunciation, and grammar through structured lessons, spaced repetition, and a tap-to-understand Reader. Supports English and Tamil learners. Product name: Bhāṣā (भाषा · பாஷா).
 
 ## Key Documents
 

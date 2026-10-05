@@ -25,7 +25,7 @@ export default function HomePage() {
         <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="font-bold text-xl tracking-tight text-[var(--ink)]">
-              Haṃsa
+              Bhāṣā
             </span>
           </div>
 

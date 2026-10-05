@@ -1,7 +1,7 @@
 {
   "name": "agile-basha",
   "version": "1.0.0",
-  "description": "Haṃsa — Sanskrit Learning Platform",
+  "description": "Bhāṣā — Sanskrit Learning Platform",
   "type": "module",
   "scripts": {
     "dev": "next dev",

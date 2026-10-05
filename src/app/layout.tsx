@@ -4,7 +4,7 @@ import { baloo2, notoSans, notoSansDevanagari, notoSansTamil } from "@/styles/fo
 import { I18nProvider } from "@/i18n/provider";
 
 export const metadata: Metadata = {
-  title: "Haṃsa — Learn Sanskrit step by step",
+  title: "Bhāṣā — Learn Sanskrit step by step",
   description:
     "Learn to read, understand, and speak simple Sanskrit step by step, in the language you already think in (English & Tamil).",
 };

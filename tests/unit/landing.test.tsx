@@ -6,7 +6,7 @@ import LandingPage from "@/app/page";
 describe("Landing Page", () => {
   it("displays the product brand, title, and promise statement", () => {
     render(<LandingPage />);
-    expect(screen.getByText("Haṃsa")).toBeInTheDocument();
+    expect(screen.getByText("Bhāṣā")).toBeInTheDocument();
     expect(
       screen.getByText(/learn to read, understand, and speak sanskrit step by step/i)
     ).toBeInTheDocument();

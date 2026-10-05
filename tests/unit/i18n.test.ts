@@ -4,8 +4,8 @@ import ta from "@/i18n/ta.json";
 
 describe("i18n translation dictionaries", () => {
   it("contains all common keys in English and Tamil", () => {
-    expect(en.common.appName).toBe("Haṃsa");
-    expect(ta.common.appName).toBe("ஹம்ஸ");
+    expect(en.common.appName).toBe("Bhāṣā");
+    expect(ta.common.appName).toBe("பாஷா");
     expect(en.common.continue).toBe("Continue");
     expect(ta.common.continue).toBe("தொடர்க");
   });
