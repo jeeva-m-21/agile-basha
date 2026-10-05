@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-haldi: var(--haldi);
+  --color-haldi-edge: var(--haldi-edge);
+  --color-neel: var(--neel);
+  --color-neel-edge: var(--neel-edge);
+  --color-neel-tint: var(--neel-tint);
+  --color-tulsi: var(--tulsi);
+  --color-tulsi-ink: var(--tulsi-ink);
+  --color-tulsi-tint: var(--tulsi-tint);
+  --color-sindoor: var(--sindoor);
+  --color-sindoor-ink: var(--sindoor-ink);
+  --color-sindoor-tint: var(--sindoor-tint);
+  --color-agni: var(--agni);
+  --color-mayura: var(--mayura);
+  --color-mayura-tint: var(--mayura-tint);
+
+  --font-display: var(--font-display);
+  --font-ui: var(--font-ui);
+  --font-verse: var(--font-verse);
+
+  --radius-control: var(--r-control);
+  --radius-card: var(--r-card);
+  --radius-sheet: var(--r-sheet);
+  --radius-pill: var(--r-pill);
+}
+
+:root {
+  /* colour */
+  --ink: #2D2A32;
+  --ink-2: #5A564D;
+  --ink-3: #75705F;
+  --paper: #FFFBF2;
+  --surface: #FFFFFF;
+  --surface-2: #FFF4DC;
+  --line: #E8E0CF;
+  --line-strong: #9A9079;
+  --haldi: #FFB800;
+  --haldi-edge: #C98A00;
+  --neel: #3454D1;
+  --neel-edge: #2A45B0;
+  --neel-tint: #E8EDFF;
+  --tulsi: #25803A;
+  --tulsi-ink: #1E6B2F;
+  --tulsi-tint: #E3F5E7;
+  --sindoor: #D63B2A;
+  --sindoor-ink: #A82617;
+  --sindoor-tint: #FDE8E4;
+  --agni: #FF8A1F;
+  --mayura: #0B7F8A;
+  --mayura-tint: #E0F4F5;
+
+  /* shape & space */
+  --r-control: 14px;
+  --r-card: 16px;
+  --r-sheet: 24px;
+  --r-pill: 999px;
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --edge: 4px;
+  --edge-pressed: 1px;
+  --press-shift: 3px;
+
+  /* motion */
+  --dur-instant: 80ms;
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 360ms;
+  --dur-celebrate: 600ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* typography */
+  --font-display: "Baloo 2", "Baloo Thambi 2", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui: "Noto Sans", "Noto Sans Devanagari", "Noto Sans Tamil", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-verse: "Tiro Devanagari Sanskrit", "Noto Serif Tamil", Georgia, serif;
+}
+
+:root[data-theme="dark"],
+body[data-theme="dark"] {
+  --ink: #F4EFE4;
+  --ink-2: #CFC8B8;
+  --ink-3: #A8A294;
+  --paper: #1C1B20;
+  --surface: #24232A;
+  --surface-2: #2E2C35;
+  --line: #3A3843;
+  --line-strong: #77748A;
+  --haldi: #FFC933;
+  --haldi-edge: #D9A300;
+  --neel: #8FA6FF;
+  --neel-edge: #4766E0;
+  --neel-tint: #1F284B;
+  --tulsi: #6FD488;
+  --tulsi-ink: #A2F3B6;
+  --tulsi-tint: #14351C;
+  --sindoor: #FF8A7A;
+  --sindoor-ink: #FFB3A8;
+  --sindoor-tint: #3B1B17;
+  --agni: #FFA04D;
+  --mayura: #5CC9D3;
+  --mayura-tint: #153338;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* script-aware line heights */
+:lang(sa-Deva), :lang(hi), :lang(sa-Taml), :lang(ta) {
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 120ms !important;
+  }
+}
+
+/* Pressable depth key styling */
+.key-pressable {
+  position: relative;
+  transition: transform var(--dur-instant) var(--ease-standard),
+              border-bottom-width var(--dur-instant) var(--ease-standard),
+              box-shadow var(--dur-instant) var(--ease-standard);
+}
+
+.key-pressable:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
