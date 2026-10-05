@@ -10,10 +10,12 @@ export function OfflineBanner() {
   const { language } = useTranslation();
   const isTamil = language === "ta";
 
+  const [mounted, setMounted] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
   const [showSyncedNotice, setShowSyncedNotice] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     if (!isOnline) {
       setWasOffline(true);
       setShowSyncedNotice(false);
@@ -28,8 +30,8 @@ export function OfflineBanner() {
     }
   }, [isOnline, wasOffline]);
 
-  // If online and no sync notice to show, render nothing
-  if (isOnline && !showSyncedNotice) {
+  // If not yet mounted or online with no sync notice, render nothing
+  if (!mounted || (isOnline && !showSyncedNotice)) {
     return null;
   }
 

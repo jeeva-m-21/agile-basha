@@ -6,10 +6,8 @@ import { Button } from "./Button";
 
 export function ThemeToggle({ className }: { className?: string }) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const stored = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
     if (stored === "dark" || stored === "light") {
       setTheme(stored);
@@ -31,20 +29,6 @@ export function ThemeToggle({ className }: { className?: string }) {
     }
   };
 
-  if (!mounted) {
-    return (
-      <Button
-        variant="ghost"
-        size="sm"
-        className={className}
-        aria-label="Toggle theme"
-        disabled
-      >
-        <Moon className="w-5 h-5 text-[var(--ink-2)]" />
-      </Button>
-    );
-  }
-
   return (
     <Button
       variant="ghost"
@@ -53,6 +37,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       className={className}
       aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
       data-testid="theme-toggle"
+      suppressHydrationWarning
     >
       {theme === "light" ? (
         <Moon className="w-5 h-5 text-[var(--ink-2)]" />

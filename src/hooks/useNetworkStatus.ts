@@ -7,12 +7,7 @@ import {
 } from "@/lib/offline/queue";
 
 export function useNetworkStatus() {
-  const [isOnline, setIsOnline] = useState<boolean>(() => {
-    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
-      return navigator.onLine;
-    }
-    return true;
-  });
+  const [isOnline, setIsOnline] = useState<boolean>(true);
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
@@ -40,6 +35,10 @@ export function useNetworkStatus() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    if (typeof navigator !== "undefined") {
+      setIsOnline(navigator.onLine);
+    }
 
     const handleOnline = () => {
       setIsOnline(true);
