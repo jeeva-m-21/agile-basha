@@ -88,6 +88,20 @@ export function TutorChatPanel({ isOpen, onClose, context }: TutorChatPanelProps
     setInput("");
     setIsLoading(true);
 
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      const offlineMsg: ChatMessage = {
+        id: `offline-${Date.now()}`,
+        role: "assistant",
+        content: isTamil
+          ? "AI ஆசிரியர் சேவைக்கு இணைய இணைப்பு தேவை. உங்கள் சாதனம் ஆஃப்லைனில் உள்ளது. பாடங்களையும் சொற்களஞ்சியத்தையும் ஆஃப்லைனில் பயிற்சி செய்யலாம்!"
+          : "The AI Tutor requires an active internet connection. You are currently offline. Downloaded lessons and review are still available!",
+        timestamp: "Just now",
+      };
+      setMessages((prev) => [...prev, offlineMsg]);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/tutor/chat", {
         method: "POST",
@@ -126,10 +140,15 @@ export function TutorChatPanel({ isOpen, onClose, context }: TutorChatPanelProps
         setMessages((prev) => [...prev, errorMsg]);
       }
     } catch {
+      const isOffline = typeof navigator !== "undefined" && !navigator.onLine;
       const fallbackMsg: ChatMessage = {
         id: `err-${Date.now()}`,
         role: "assistant",
-        content: isTamil
+        content: isOffline
+          ? isTamil
+            ? "AI ஆசிரியர் சேவைக்கு இணைய இணைப்பு தேவை. உங்கள் சாதனம் தற்போது ஆஃப்லைனில் உள்ளது."
+            : "AI Tutor requires an internet connection. You are currently offline."
+          : isTamil
           ? "இணைப்பில் பிழை ஏற்பட்டது. தயவுசெய்து சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்."
           : "Network error. Please try asking again in a moment.",
         timestamp: "Just now",

@@ -1,0 +1,21 @@
+{
+  "name": "Bhāṣā — Sanskrit Learning",
+  "short_name": "Bhāṣā",
+  "description": "Learn to read, understand, and speak Sanskrit step by step in English and Tamil.",
+  "start_url": "/home",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#7C2D12",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["education", "language", "books"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512 any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

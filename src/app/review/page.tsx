@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { ReviewItem } from "@/lib/srs/sm2";
 import { reviewStore } from "@/lib/srs/storage";
+import { enqueueOfflineAction } from "@/lib/offline/queue";
+import { OfflineBanner } from "@/components/offline/OfflineBanner";
 
 export default function ReviewPage() {
   const router = useRouter();
@@ -62,17 +64,22 @@ export default function ReviewPage() {
   const handleRate = async (quality: number) => {
     if (!currentItem) return;
 
+    const payload = {
+      itemId: currentItem.id,
+      quality,
+      action: "rate",
+    };
+
     try {
-      await fetch("/api/review/answer", {
+      const res = await fetch("/api/review/answer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          itemId: currentItem.id,
-          quality,
-          action: "rate",
-        }),
+        body: JSON.stringify(payload),
       });
-    } catch {}
+      if (!res.ok) throw new Error("Review answer API error");
+    } catch {
+      await enqueueOfflineAction("review_answer", "/api/review/answer", payload);
+    }
 
     setStats((prev) => ({ ...prev, reviewed: prev.reviewed + 1 }));
     advanceNext();
@@ -81,17 +88,22 @@ export default function ReviewPage() {
   const handleKnowThis = async () => {
     if (!currentItem) return;
 
+    const payload = {
+      itemId: currentItem.id,
+      quality: 5,
+      action: "know_this",
+    };
+
     try {
-      await fetch("/api/review/answer", {
+      const res = await fetch("/api/review/answer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          itemId: currentItem.id,
-          quality: 5,
-          action: "know_this",
-        }),
+        body: JSON.stringify(payload),
       });
-    } catch {}
+      if (!res.ok) throw new Error("Review answer API error");
+    } catch {
+      await enqueueOfflineAction("review_answer", "/api/review/answer", payload);
+    }
 
     setStats((prev) => ({
       ...prev,
@@ -104,17 +116,22 @@ export default function ReviewPage() {
   const handleReset = async () => {
     if (!currentItem) return;
 
+    const payload = {
+      itemId: currentItem.id,
+      quality: 0,
+      action: "reset",
+    };
+
     try {
-      await fetch("/api/review/answer", {
+      const res = await fetch("/api/review/answer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          itemId: currentItem.id,
-          quality: 0,
-          action: "reset",
-        }),
+        body: JSON.stringify(payload),
       });
-    } catch {}
+      if (!res.ok) throw new Error("Review answer API error");
+    } catch {
+      await enqueueOfflineAction("review_answer", "/api/review/answer", payload);
+    }
 
     setStats((prev) => ({
       ...prev,
@@ -281,6 +298,7 @@ export default function ReviewPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--paper)] text-[var(--ink)]">
+      <OfflineBanner />
       {/* Top Header with Progress Bar and Close (✕) */}
       <header className="w-full bg-[var(--surface)] border-b border-[var(--line)] sticky top-0 z-20">
         <div className="max-w-md mx-auto px-4">

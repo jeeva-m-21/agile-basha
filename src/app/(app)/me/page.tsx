@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { WeeklySummaryCard } from "@/components/progress/WeeklySummaryCard";
+import { InstallPromptBanner } from "@/components/pwa/InstallPromptBanner";
 import { computeProgressSummary, ProgressSummary } from "@/lib/progress/skills";
 import { usePreferencesStore } from "@/stores/preferencesStore";
 import { useTranslation } from "@/i18n/provider";
@@ -44,6 +45,9 @@ export default function MePage() {
           </p>
         </div>
       </div>
+
+      {/* PWA Install Prompt Banner */}
+      <InstallPromptBanner />
 
       {/* Vocabulary Count Card per SPEC §13.1 */}
       <Card

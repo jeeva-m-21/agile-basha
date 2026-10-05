@@ -147,13 +147,13 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 13 — Offline & PWA
 **User Feature:** User can continue lessons without internet; app installable on phone.
 
-- [ ] PWA manifest
-- [ ] Service worker: lesson + audio precaching (next 7 days)
-- [ ] IndexedDB queue for offline answers
-- [ ] Sync on reconnect
-- [ ] Offline UI states (clear messaging per feature)
-- [ ] App install prompt
-- [ ] **Tests:** Offline lesson completion, sync after reconnect
+- [x] PWA manifest
+- [x] Service worker: lesson + audio precaching (next 7 days)
+- [x] IndexedDB queue for offline answers
+- [x] Sync on reconnect
+- [x] Offline UI states (clear messaging per feature)
+- [x] App install prompt
+- [x] **Tests:** Offline lesson completion, sync after reconnect
 
 ## Sprint 14 — Polish, Accessibility & Launch Prep
 **User Feature:** Platform is accessible, performant, and ready for beta users.

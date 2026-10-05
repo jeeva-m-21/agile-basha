@@ -20,6 +20,8 @@ import { level0Lesson2 } from "@/lib/curriculum/lesson2";
 import { usePreferencesStore } from "@/stores/preferencesStore";
 import { useTranslation } from "@/i18n/provider";
 import { useAudio } from "@/hooks/useAudio";
+import { enqueueOfflineAction } from "@/lib/offline/queue";
+import { OfflineBanner } from "@/components/offline/OfflineBanner";
 import { Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function LessonPage() {
@@ -79,12 +81,18 @@ export default function LessonPage() {
     } else {
       // Completed lesson
       try {
-        await fetch(`/api/lessons/${lesson.id}/complete`, {
+        const res = await fetch(`/api/lessons/${lesson.id}/complete`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ lessonId: lesson.id }),
         });
-      } catch {}
+        if (!res.ok) throw new Error("Complete failed");
+      } catch {
+        // Enqueue completion action for sync on reconnect
+        await enqueueOfflineAction("lesson_complete", `/api/lessons/${lesson.id}/complete`, {
+          lessonId: lesson.id,
+        });
+      }
       router.push("/home");
     }
   };
@@ -112,6 +120,8 @@ export default function LessonPage() {
         body: JSON.stringify(payload),
       });
 
+      if (!res.ok) throw new Error("Answer API error");
+
       const data = await res.json();
       const isCorrect = data.correct;
       const explanation = isTamil ? data.explanationTa : data.explanationEn;
@@ -128,6 +138,8 @@ export default function LessonPage() {
         explanation: isTamil ? result.explanationTa : result.explanationEn,
         alsoCorrect: isTamil ? result.alsoCorrectTa : result.alsoCorrectEn,
       });
+      // Enqueue answer for sync when back online
+      await enqueueOfflineAction("lesson_answer", `/api/lessons/${lesson.id}/answer`, payload);
     }
   };
 
@@ -145,6 +157,7 @@ export default function LessonPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--paper)] text-[var(--ink)]">
+      <OfflineBanner />
       {/* Top Header with Progress Bar and Close (✕) */}
       <header className="w-full bg-[var(--surface)] border-b border-[var(--line)] sticky top-0 z-20">
         <div className="max-w-md mx-auto px-4">
