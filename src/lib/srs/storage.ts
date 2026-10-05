@@ -177,6 +177,41 @@ class ReviewStore {
     };
   }
 
+  getAllItems(): ReviewItem[] {
+    return Array.from(this.items.values());
+  }
+
+  upsertItem(item: Partial<ReviewItem> & { id: string }) {
+    const existing = this.items.get(item.id);
+    const fullItem: ReviewItem = {
+      userId: "guest-user-default",
+      itemType: "word",
+      sanskrit: item.sanskrit || "",
+      iast: item.iast || "",
+      tamilScript: item.tamilScript || "",
+      meaningEn: item.meaningEn || "",
+      meaningTa: item.meaningTa || "",
+      soundToPlay: item.soundToPlay || item.sanskrit || "",
+      isLongVowel: item.isLongVowel ?? false,
+      nextDue: item.nextDue || new Date().toISOString(),
+      intervalDays: item.intervalDays ?? 1,
+      easeFactor: item.easeFactor ?? 2.5,
+      repCount: item.repCount ?? 0,
+      ...existing,
+      ...item,
+    };
+    this.items.set(item.id, fullItem);
+  }
+
+  clear() {
+    this.items.clear();
+    this.attempts = [];
+  }
+
+  reset() {
+    this.clear();
+  }
+
   resetStore() {
     this.items.clear();
     this.attempts = [];

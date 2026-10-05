@@ -8,6 +8,9 @@ export interface PreferencesState {
   level: "beginner" | "some";
   dailyGoalMin: number;
   theme: "system" | "light" | "dark";
+  highContrast: boolean;
+  reducedMotion: boolean;
+  textSize: "normal" | "large" | "xlarge";
   onboardingCompleted: boolean;
 
   setLearnIn: (lang: "en" | "ta") => void;
@@ -18,6 +21,9 @@ export interface PreferencesState {
   setLevel: (level: "beginner" | "some") => void;
   setDailyGoalMin: (mins: number) => void;
   setTheme: (theme: "system" | "light" | "dark") => void;
+  setHighContrast: (enabled: boolean) => void;
+  setReducedMotion: (enabled: boolean) => void;
+  setTextSize: (size: "normal" | "large" | "xlarge") => void;
   completeOnboarding: () => Promise<void>;
   loadPreferences: () => void;
 }
@@ -30,6 +36,9 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
   level: "beginner",
   dailyGoalMin: 10,
   theme: "system",
+  highContrast: false,
+  reducedMotion: false,
+  textSize: "normal",
   onboardingCompleted: false,
 
   setLearnIn: (learnIn) => {
@@ -92,6 +101,42 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
     }
   },
 
+  setHighContrast: (highContrast) => {
+    set({ highContrast });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("high_contrast", String(highContrast));
+      if (highContrast) {
+        document.documentElement.setAttribute("data-contrast", "high");
+      } else {
+        document.documentElement.removeAttribute("data-contrast");
+      }
+    }
+  },
+
+  setReducedMotion: (reducedMotion) => {
+    set({ reducedMotion });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("reduced_motion", String(reducedMotion));
+      if (reducedMotion) {
+        document.documentElement.setAttribute("data-reduced-motion", "reduce");
+      } else {
+        document.documentElement.removeAttribute("data-reduced-motion");
+      }
+    }
+  },
+
+  setTextSize: (textSize) => {
+    set({ textSize });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("text_size", textSize);
+      if (textSize !== "normal") {
+        document.documentElement.setAttribute("data-text-size", textSize);
+      } else {
+        document.documentElement.removeAttribute("data-text-size");
+      }
+    }
+  },
+
   completeOnboarding: async () => {
     set({ onboardingCompleted: true });
     if (typeof window !== "undefined") {
@@ -130,6 +175,28 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
     const level = (localStorage.getItem("user_level") as "beginner" | "some") || "beginner";
     const dailyGoalMin = Number(localStorage.getItem("daily_goal_min")) || 10;
     const completed = localStorage.getItem("onboarding_completed") === "true";
+    const highContrast = localStorage.getItem("high_contrast") === "true";
+    const reducedMotion = localStorage.getItem("reduced_motion") === "true";
+    const textSize =
+      (localStorage.getItem("text_size") as "normal" | "large" | "xlarge") || "normal";
+
+    if (highContrast) {
+      document.documentElement.setAttribute("data-contrast", "high");
+    } else {
+      document.documentElement.removeAttribute("data-contrast");
+    }
+
+    if (reducedMotion) {
+      document.documentElement.setAttribute("data-reduced-motion", "reduce");
+    } else {
+      document.documentElement.removeAttribute("data-reduced-motion");
+    }
+
+    if (textSize !== "normal") {
+      document.documentElement.setAttribute("data-text-size", textSize);
+    } else {
+      document.documentElement.removeAttribute("data-text-size");
+    }
 
     let goals = ["gita", "mantras"];
     try {
@@ -144,6 +211,9 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
       level,
       dailyGoalMin,
       goals,
+      highContrast,
+      reducedMotion,
+      textSize,
       onboardingCompleted: completed,
     });
   },

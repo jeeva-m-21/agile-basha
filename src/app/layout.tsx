@@ -40,6 +40,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-[var(--paper)] text-[var(--ink)] antialiased transition-colors duration-150">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <I18nProvider>
           <ServiceWorkerRegister />
           {children}

@@ -13,9 +13,9 @@ export default function AppShellLayout({
     <div className="min-h-screen flex flex-col bg-[var(--paper)] text-[var(--ink)]">
       <TopBar />
       <OfflineBanner />
-      <div className="flex-1 pb-20">
+      <main id="main-content" className="flex-1 pb-20 focus:outline-none">
         {children}
-      </div>
+      </main>
       <TutorFloatingTrigger />
       <BottomNav />
     </div>

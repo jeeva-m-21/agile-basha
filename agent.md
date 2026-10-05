@@ -53,7 +53,7 @@ A Sanskrit learning platform (PWA) that teaches reading, pronunciation, and gram
 > **Sprint 11 — AI Tutor** (COMPLETED)
 > **Sprint 12 — Progress & Motivation** (COMPLETED)
 > **Sprint 13 — Offline & PWA** (COMPLETED)
-> **Sprint 14 — Polish, Accessibility & Launch Prep** (NEXT)
+> **Sprint 14 — Polish, Accessibility & Launch Prep** (COMPLETED — ALL 14 SPRINTS COMPLETE)
 
 See `docs/sprints.md` for the full plan.
 

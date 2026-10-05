@@ -158,11 +158,11 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 14 — Polish, Accessibility & Launch Prep
 **User Feature:** Platform is accessible, performant, and ready for beta users.
 
-- [ ] Accessibility audit (keyboard nav, screen reader, lang tags, ARIA)
-- [ ] Performance audit (LCP ≤ 2.5s, CLS ≤ 0.05)
-- [ ] Reduced motion support
-- [ ] High contrast mode
-- [ ] Text size adjustment
-- [ ] Account management (data export, delete)
-- [ ] Error states for all screens
-- [ ] **Tests:** Accessibility automated checks, Lighthouse audit, cross-browser
+- [x] Accessibility audit (keyboard nav, screen reader, lang tags, ARIA)
+- [x] Performance audit (LCP ≤ 2.5s, CLS ≤ 0.05)
+- [x] Reduced motion support
+- [x] High contrast mode
+- [x] Text size adjustment
+- [x] Account management (data export, delete)
+- [x] Error states for all screens
+- [x] **Tests:** Accessibility automated checks, Lighthouse audit, cross-browser
