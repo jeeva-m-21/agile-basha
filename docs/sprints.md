@@ -87,15 +87,15 @@ Each sprint = 1 week. Each sprint delivers a user-facing feature. Tests are writ
 ## Sprint 8 — Reader (Basic)
 **User Feature:** User pastes Sanskrit text and sees word-by-word breakdown with meanings.
 
-- [ ] Sanskrit input component (script detection, typing helper)
-- [ ] Transliteration engine (Devanāgarī ↔ Tamil ↔ IAST)
-- [ ] Token chip component
-- [ ] Reader page with input + analysis display
-- [ ] Reader API (POST /api/reader/analyze) — basic: script normalize + word split
-- [ ] Dictionary lookup for word meanings
-- [ ] DB table: words (seeded with initial vocabulary)
-- [ ] Progressive disclosure (meaning → grammar → rule)
-- [ ] **Tests:** Script detection, transliteration accuracy, word tokenization
+- [x] Sanskrit input component (script detection, typing helper)
+- [x] Transliteration engine (Devanāgarī ↔ Tamil ↔ IAST)
+- [x] Token chip component
+- [x] Reader page with input + analysis display
+- [x] Reader API (POST /api/reader/analyze) — basic: script normalize + word split
+- [x] Dictionary lookup for word meanings
+- [x] DB table: words (seeded with initial vocabulary)
+- [x] Progressive disclosure (meaning → grammar → rule)
+- [x] **Tests:** Script detection, transliteration accuracy, word tokenization
 
 ## Sprint 9 — Reader (AI Translation + Library)
 **User Feature:** Reader shows AI translation and user can browse curated texts.

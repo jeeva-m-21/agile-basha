@@ -142,6 +142,18 @@ export const reviewAttempts = pgTable("review_attempts", {
   action: text("action", { enum: ["rate", "know_this", "reset"] }).default("rate").notNull(),
 });
 
+export const words = pgTable("words", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  sanskrit: text("sanskrit").notNull(),
+  transliteration: text("transliteration").notNull(),
+  tamilScript: text("tamil_script").notNull(),
+  meaningEn: text("meaning_en").notNull(),
+  meaningTa: text("meaning_ta").notNull(),
+  root: text("root"),
+  partOfSpeech: text("part_of_speech"),
+  lessonId: text("lesson_id"),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type UserPreferences = typeof userPreferences.$inferSelect;
@@ -155,4 +167,6 @@ export type UserProgress = typeof userProgress.$inferSelect;
 export type Streak = typeof streaks.$inferSelect;
 export type DbReviewItem = typeof reviewItems.$inferSelect;
 export type DbReviewAttempt = typeof reviewAttempts.$inferSelect;
+export type Word = typeof words.$inferSelect;
+
 
