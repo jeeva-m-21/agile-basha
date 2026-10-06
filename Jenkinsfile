@@ -34,7 +34,9 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '=== Installing Node.js dependencies with clean install ==='
-                sh 'npm ci'
+                retry(3) {
+                    sh 'npm ci --prefer-offline || npm ci'
+                }
             }
         }
 
