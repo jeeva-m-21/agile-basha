@@ -7,7 +7,6 @@ pipeline {
         DOCKER_REPO     = 'jeeva-m-21/agile-basha'
         IMAGE_TAG       = "${env.BUILD_NUMBER ?: 'latest'}"
         DOCKER_BUILDKIT = '1'
-        NODE_ENV        = 'production'
     }
 
     options {
@@ -35,7 +34,7 @@ pipeline {
             steps {
                 echo '=== Installing Node.js dependencies with clean install ==='
                 retry(3) {
-                    sh 'npm ci --prefer-offline || npm ci'
+                    sh 'npm ci --include=dev --prefer-offline'
                 }
             }
         }
