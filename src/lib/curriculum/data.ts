@@ -96,7 +96,34 @@ export const curriculumLevels: SeedLevel[] = [
     titleTa: "நிலை 1 — முதல் சொற்களும் வாக்கியங்களும்",
     outcomeEn: "You will be able to understand and say simple sentences like 'Rāma goes to the forest'.",
     outcomeTa: "'ராமன் காட்டிற்குச் செல்கிறான்' போன்ற எளிய வாக்கியங்களை நீங்கள் புரிந்துகொண்டு பேச முடியும்.",
-    units: [],
+    units: [
+      {
+        id: "unit-1-1",
+        orderNum: 1,
+        titleEn: "Simple Sentences & Objects",
+        titleTa: "எளிய வாக்கியங்களும் செயப்படுபொருளும்",
+        lessons: [
+          {
+            id: "level-1-lesson-1",
+            orderNum: 1,
+            titleEn: "First Sentences & Actions (Subject + Verb)",
+            titleTa: "முதல் வாக்கியங்களும் வினைகளும் (எழுவாய் + பயனிலை)",
+            goalEn: "Connect a singular masculine subject to present actions with '-ti'.",
+            goalTa: "ஒருமை எழுவாயுடன் நிகழ்கால வினையை '-தி' கொண்டு இணைக்கப் பயிலவும்.",
+            estMinutes: 10,
+          },
+          {
+            id: "level-1-lesson-2",
+            orderNum: 2,
+            titleEn: "Reaching the Destination: Accusative Case",
+            titleTa: "இலக்கும் செயப்படுபொருளும் (இரண்டாம் வேற்றுமை)",
+            goalEn: "Master the '-m' ending for destinations and direct objects in sentences.",
+            goalTa: "செல்லுமிடம் அல்லது செயப்படுபொருளை '-ம்' கொண்டு குறிக்கப் பழகவும்.",
+            estMinutes: 12,
+          },
+        ],
+      },
+    ],
   },
   {
     id: "level-2",

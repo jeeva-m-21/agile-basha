@@ -9,14 +9,18 @@ import { SkillMap } from "@/components/progress/SkillMap";
 import { curriculumLevels } from "@/lib/curriculum/data";
 import { computeProgressSummary, ProgressSummary } from "@/lib/progress/skills";
 import { useTranslation } from "@/i18n/provider";
-import { Lock, PlayCircle, Map, Layers } from "lucide-react";
+import { Lock, PlayCircle, Map, Layers, Sparkles } from "lucide-react";
+import { PlacementQuizModal } from "@/components/placement/PlacementQuizModal";
+import { usePreferencesStore } from "@/stores/preferencesStore";
 
 export default function LearnPage() {
   const { language } = useTranslation();
   const isTamil = language === "ta";
+  const { placedLevel } = usePreferencesStore();
 
   const [activeTab, setActiveTab] = useState<"skills" | "curriculum">("skills");
   const [progress, setProgress] = useState<ProgressSummary>(() => computeProgressSummary());
+  const [isPlacementOpen, setIsPlacementOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/progress/summary")
@@ -31,15 +35,28 @@ export default function LearnPage() {
 
   return (
     <main className="max-w-md w-full mx-auto px-4 py-5 space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--ink)]">
-          {isTamil ? "கற்றல் & பாடத்திட்டம்" : "Learn & Progress"}
-        </h1>
-        <p className="text-xs text-[var(--ink-2)] mt-0.5">
-          {isTamil
-            ? "திறன் வரைபடம் மற்றும் படிப்படியான பாடங்கள்"
-            : "Visual skill map and structured progression from sounds to texts"}
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--ink)]">
+            {isTamil ? "கற்றல் & பாடத்திட்டம்" : "Learn & Progress"}
+          </h1>
+          <p className="text-xs text-[var(--ink-2)] mt-0.5">
+            {isTamil
+              ? "திறன் வரைபடம் மற்றும் படிப்படியான பாடங்கள்"
+              : "Visual skill map and structured progression from sounds to texts"}
+          </p>
+        </div>
+
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setIsPlacementOpen(true)}
+          className="h-8 px-2.5 text-xs shrink-0 font-semibold border-[var(--line-strong)]"
+          data-testid="learn-placement-btn"
+        >
+          <Sparkles className="w-3.5 h-3.5 mr-1 text-[var(--mayura)]" />
+          <span>{isTamil ? "நிலைத் தேர்வு" : "Placement Test"}</span>
+        </Button>
       </div>
 
       {/* Tabs: Skill Map vs Curriculum Units */}
@@ -117,7 +134,10 @@ export default function LearnPage() {
 
                         <div className="space-y-2">
                           {unit.lessons.map((lesson, idx) => {
-                            const isUnlocked = isCurrent && idx === 0;
+                            const isUnlocked =
+                              (lvl.orderNum === 0 && idx === 0) ||
+                              (placedLevel === lvl.id && idx === 0) ||
+                              progress.currentLevel >= lvl.orderNum;
 
                             return (
                               <Card
@@ -177,6 +197,11 @@ export default function LearnPage() {
           })}
         </div>
       )}
+
+      <PlacementQuizModal
+        isOpen={isPlacementOpen}
+        onClose={() => setIsPlacementOpen(false)}
+      />
     </main>
   );
 }

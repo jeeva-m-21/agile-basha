@@ -12,6 +12,8 @@ export interface PreferencesState {
   reducedMotion: boolean;
   textSize: "normal" | "large" | "xlarge";
   onboardingCompleted: boolean;
+  placedLevel: string;
+  placedLesson: string;
 
   setLearnIn: (lang: "en" | "ta") => void;
   setScript: (script: "devanagari" | "tamil" | "iast") => void;
@@ -19,6 +21,7 @@ export interface PreferencesState {
   setGoals: (goals: string[]) => void;
   toggleGoal: (goal: string) => void;
   setLevel: (level: "beginner" | "some") => void;
+  setPlacedLevel: (level: string, lesson: string) => void;
   setDailyGoalMin: (mins: number) => void;
   setTheme: (theme: "system" | "light" | "dark") => void;
   setHighContrast: (enabled: boolean) => void;
@@ -40,6 +43,8 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
   reducedMotion: false,
   textSize: "normal",
   onboardingCompleted: false,
+  placedLevel: "level-0",
+  placedLesson: "level-0-lesson-1",
 
   setLearnIn: (learnIn) => {
     set({ learnIn });
@@ -81,6 +86,19 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
     set({ level });
     if (typeof window !== "undefined") {
       localStorage.setItem("user_level", level);
+    }
+  },
+
+  setPlacedLevel: (placedLevel, placedLesson) => {
+    set({
+      placedLevel,
+      placedLesson,
+      level: placedLevel === "level-0" ? "beginner" : "some",
+    });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("placed_level", placedLevel);
+      localStorage.setItem("placed_lesson", placedLesson);
+      localStorage.setItem("user_level", placedLevel === "level-0" ? "beginner" : "some");
     }
   },
 
@@ -173,6 +191,8 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
     const helperLine =
       (localStorage.getItem("helper_line") as "off" | "roman" | "tamil") || "roman";
     const level = (localStorage.getItem("user_level") as "beginner" | "some") || "beginner";
+    const placedLevel = localStorage.getItem("placed_level") || (level === "some" ? "level-1" : "level-0");
+    const placedLesson = localStorage.getItem("placed_lesson") || (level === "some" ? "level-1-lesson-1" : "level-0-lesson-1");
     const dailyGoalMin = Number(localStorage.getItem("daily_goal_min")) || 10;
     const completed = localStorage.getItem("onboarding_completed") === "true";
     const highContrast = localStorage.getItem("high_contrast") === "true";
@@ -209,6 +229,8 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
       script,
       helperLine,
       level,
+      placedLevel,
+      placedLesson,
       dailyGoalMin,
       goals,
       highContrast,

@@ -18,6 +18,7 @@ import {
   Clock,
   Compass,
 } from "lucide-react";
+import { PlacementQuizModal } from "@/components/placement/PlacementQuizModal";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function OnboardingPage() {
   const preferences = usePreferencesStore();
 
   const [step, setStep] = useState<number>(1);
+  const [isPlacementModalOpen, setIsPlacementModalOpen] = useState<boolean>(false);
   const totalSteps = 6;
 
   useEffect(() => {
@@ -468,6 +470,35 @@ export default function OnboardingPage() {
                     </div>
                   )}
                 </button>
+
+                {preferences.level === "some" && (
+                  <div className="p-3.5 rounded-[14px] bg-[var(--surface-2)] border border-[var(--line-strong)] animate-fadeIn space-y-2.5">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[var(--mayura)]" />
+                      <span className="text-xs font-bold text-[var(--ink)]">
+                        {language === "ta"
+                          ? "பரிந்துரை: 5 நிமிட நிலைத் தேர்வு"
+                          : "Recommended: Take the 5-min Placement Quiz"}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[var(--ink-2)]">
+                      {language === "ta"
+                        ? "உங்கள் தேவநாகரி வாசிப்பு மற்றும் இலக்கண அறிவை உடனடியாக மதிப்பிட்டு சரியான பாடத்தில் இணையுங்கள்."
+                        : "Automatically diagnose your script reading, vocabulary, and verb knowledge to jump to your optimal lesson."}
+                    </p>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setIsPlacementModalOpen(true)}
+                      className="w-full text-xs font-bold h-9"
+                      data-testid="launch-placement-btn"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                      <span>{language === "ta" ? "நிலைத் தேர்வைத் தொடங்குக" : "Start Placement Quiz"}</span>
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -621,6 +652,16 @@ export default function OnboardingPage() {
             </Button>
           </div>
         )}
+
+        <PlacementQuizModal
+          isOpen={isPlacementModalOpen}
+          onClose={() => setIsPlacementModalOpen(false)}
+          onComplete={(evalResult) => {
+            // User completed placement test, proceed to next step
+            preferences.setPlacedLevel(evalResult.recommendedLevel, evalResult.recommendedLesson);
+            setStep(6);
+          }}
+        />
       </main>
     </div>
   );
